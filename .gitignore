@@ -1,4 +1,3 @@
 vendor/*
-app/storage/*
 .DS_Store
 app/config/dev/*
