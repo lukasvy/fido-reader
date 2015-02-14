@@ -1,0 +1,172 @@
+<div>
+<div class="modal-header">
+  <h3>{{modalOptions.headerText}}</h3>
+</div>
+<div class="modal-body">
+<div class="loading" ng-show="modalOptions.loading"><lv-loading></lv-loading></div>
+<div ng-hide="modalOptions.loading">
+<tabset>
+	<tab>
+		<tab-heading>
+		<i class="icon-user"></i> {{L('User Info')}}
+    	</tab-heading>
+
+	<form name="newUser" novalidate ng-hide="modalOptions.remove">
+		<ul class="formlist">
+		<li ng-hide="modalOptions.show">
+			<label for="first_name">{{L('First Name')}} :</label>
+			<input size="80" name="first_name" ng-model="data.first_name" type="text" required ng-minlength=2 value="{{data.first_name}}" ng-pattern="/[a-zA-Z\'_-]/">
+			<div class="error" ng-show="newUser.first_name.$dirty && newUser.first_name.$invalid">
+				<small class="error" ng-show="newUser.first_name.$error.required">
+					{{L('First Name is required!')}}
+				</small>
+				<small class="error" ng-show="newUser.first_name.$error.minlength">
+				        {{L('First Name needs to be at least 2 characters long!')}}
+				</small>
+				<small class="error" ng-show="newUser.first_name.$error.pattern">
+				     {{L('Please enter valid First Name!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-hide="modalOptions.show">
+			<label for="last_name">{{L('Last Name')}} :</label>
+			<input size="80" name="last_name" ng-model="data.last_name" type="text" required ng-minlength=2 value="{{data.last_name}}" ng-pattern="/[a-zA-Z\'_-]/">
+			<div class="error" ng-show="newUser.last_name.$dirty && newUser.last_name.$invalid">
+				<small class="error" ng-show="newUser.last_name.$error.required">
+					{{L('Last Name is required!')}}
+				</small>
+				<small class="error" ng-show="newUser.last_name.$error.minlength">
+				        {{L('Last Name needs to be at least 2 characters long!')}}
+				</small>
+				<small class="error" ng-show="newUser.last_name.$error.pattern">
+				     {{L('Please enter valid Last Name!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-hide="modalOptions.show">
+			<label for="username">{{L('Username')}} :</label>
+			<input size="80" ensure-unique="users" name="username" ng-model="data.username" type="text" required ng-minlength=4 value="{{data.username}}" ng-disabled="modalOptions.edit">
+			<div class="error" ng-show="newUser.username.$dirty && newUser.username.$invalid">
+				<small class="error" ng-show="newUser.username.$error.required">
+					{{L('Username is required!')}}
+				</small>
+				<small class="error" ng-show="newUser.username.$error.checking">
+					{{L('Checking for valid username! ...')}}
+				</small>
+				<small class="error" ng-show="newUser.username.$error.unique">
+					{{L('This username is already in use!')}}
+				</small>
+				<small class="error" ng-show="newUser.username.$error.minlength">
+				        {{L('Username needs to be at least 4 characters long!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-hide="modalOptions.show">
+			<label for="email">{{L('Email')}} :</label>
+			<input ensure-unique="users" size="80" name="email" ng-model="data.email" type="email" required ng-minlength=4 value="{{data.email}}" ng-disabled="modalOptions.edit">
+			<div class="error" ng-show="newUser.email.$dirty && newUser.email.$invalid">
+				<small class="error" ng-show="newUser.email.$error.required">
+					{{L('Email is required!')}}
+				</small>
+				<small class="error" ng-show="newUser.email.$error.minlength">
+				        {{L('Email needs to be at least 4 characters long!')}}
+				</small>
+				<small class="error" ng-show="newUser.email.$error.email">
+				        {{L('Valid email required!')}}
+				</small>
+				<small class="error" ng-show="newUser.email.$error.unique">
+				        {{L('This email is already registered!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-hide="modalOptions.show">
+			<label for="role">{{L('Role')}} :</label>
+			<select name="role" ng-model="data.role" ng-selected="data.role" ng-init="data.role='user'">
+				<option value="user" >{{L('User')}}</option>
+				<option value="admin" >{{L('Admin')}}</option>
+			</select>
+		</li>
+		<li ng-show="modalOptions.add">
+			<label for="password1">{{L('Password')}} :</label>
+			<input ng-disabled="modalOptions.edit" size="80" id="pw1" name="password1" ng-model="data.password1" type="password" ng-minlength=4 required>
+			<div class="error" ng-show="newUser.password1.$invalid">
+				<small class="error" ng-show="newUser.password1.$error.minlength">
+				        {{L('Password needs to be at least 4 characters long!')}}
+				</small>
+				<small class="error" ng-show="newUser.password1.$error.required">
+				        {{L('Password is required!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-show="modalOptions.add">
+			<label for="confirmpassword1">{{L('Confirm password')}} :</label>
+			<input ng-disabled="modalOptions.edit" size="80" name="confirmpassword1" ng-model="data.confirmpassword1" type="password" pw-check="pw1" >
+			<div class="error" ng-show="newUser.confirmpassword1.$invalid">
+				<small class="error" ng-show="newUser.confirmpassword1.$error.pwmatch">
+					{{L('Password and confirm password must match!')}}
+				</small>
+			</div>
+		</li>
+
+		<li ng-show="modalOptions.edit">
+			<label for="password">{{L('Password')}} :</label>
+			<input ng-disabled="modalOptions.add" size="80" id="pw2" name="password" ng-model="data.password" type="password" >
+			<div class="error" ng-show="newUser.password.$dirty && newUser.password.$invalid">
+				<small class="error" ng-show="newUser.password.$error.minlength">
+				        {{L('Password needs to be at least 4 characters long!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-show="modalOptions.edit">
+			<label for="confirmpassword">{{L('Confirm password')}} :</label>
+			<input ng-disabled="modalOptions.add" size="80" name="confirmpassword" ng-model="data.confirmpassword" type="password" pw-check="pw2" >
+			<div class="error" ng-show="newUser.confirmpassword.$invalid">
+				<small class="error" ng-show="newUser.confirmpassword.$error.pwmatch">
+					{{L('Password and confirm password must match!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-show="modalOptions.show">
+			<h4>{{L('First Name')}} :</h4>
+			<p>{{data.first_name}}</p>
+			<h4>{{L('Last Name')}} :</h4>
+			<p>{{data.last_name}}</p>
+			<h4>{{L('Username')}} :</h4>
+			<p>{{data.username}}</p>
+			<h4>{{L('Email')}} :</h4>
+			<p>{{data.email}}</p>
+			<h4>{{L('Role')}} :</h4>
+			<p>{{data.role}}</p>
+		</li>
+		</ul>
+	</form>
+</tab>
+<tab>
+	<tab-heading>
+	<i class="icon-tags"></i> {{L('User Tags')}}
+	</tab-heading>
+	<table class="table table-condensed">
+		<tr>
+			<td><b>{{L('Tag')}}<b></td>
+			<td><b>{{L('Footprint')}}<b></td>
+		</tr>
+		<tr	ng-repeat="part in data.tags">
+			<td>{{part.tag}}</td>
+			<td>{{part.footprint}}</td>
+		</tr>
+	</table>
+</tab>
+</tabset>
+</div>
+
+<div ng-show="modalOptions.remove">
+	<h4 ng-show="modalOptions.lock">{{L('Are you sure you want to lock this user?')}}</h4>
+	<h4 ng-show="modalOptions.unlock">{{L('Are you sure you want to unlock this user?')}}</h4>
+	<p>{{data.username}}</p>
+</div>
+</div>
+<div class="modal-footer">
+<lv-loading cog="1" ng-show="modalOptions.disableSubmit"></lv-loading>
+  <button type="button" class="btn" ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
+  <button type="submit" ng-hide="modalOptions.show || modalOptions.loading" ng-click="modalOptions.ok(this)" ng-disabled='(newUser.$invalid && !modalOptions.remove && !modalOptions.edit) || (modalOptions.edit && newUser.confirmpassword.$invalid) || modalOptions.disableSubmit' class="btn btn-primary" >{{modalOptions.actionButtonText}}</button>
+</div>

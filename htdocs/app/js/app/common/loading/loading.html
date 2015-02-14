@@ -1,0 +1,8 @@
+<span>
+<div ng-hide="no_text">
+	<div ng-transclude ng-show="transcludeShow"></div>
+	<div class="loading overlay" ng-show="loadingShow"><p><i class="fa fa-cog fa-spin"></i> <span class="overlay-message">{{loadingtext}}</span></p></div>
+</div>
+<span ng-show="no_text" class="loading overlay cog-spin-loading" ng-show="loadingShow"><i class="fa fa-cog fa-spin"></i>
+</span>
+</span>

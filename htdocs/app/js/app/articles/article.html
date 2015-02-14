@@ -1,0 +1,7 @@
+<div class="article">
+	<h1>{{data.title}}</h1>
+	<small>Author : {{data.author}}</small>
+	<span ng-hide="hide_loading"><lv-loading></lv-loading></span>
+	<article><ng-include src="'/article?id='+data.article_id" onload="hide_loading=true"></ng-include></article>
+	<h4><a href="{{data.url}}" target="_blank">Visit Article Page</a></h4>
+</div>

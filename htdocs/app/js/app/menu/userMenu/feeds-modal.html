@@ -1,0 +1,39 @@
+<div>
+<div class="modal-header">
+  <h3>{{modalOptions.headerText}}</h3>
+</div>
+<div class="modal-body">
+<div class="loading" ng-show="modalOptions.loading">{{L('Loading...')}}</div>
+	<form name="newFeed" novalidate ng-hide="modalOptions.remove">
+		<ul class="formlist">
+		<li ng-hide="modalOptions.show">
+			<label for="url">{{L('Url')}} :</label>
+			<input size="80" name="url" ng-model="data.url" type="url" required ng-minlength=4 ng-pattern="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" value="{{data.url}}" ng-disabled={{modalOptions.edit}}>
+			<div class="error" ng-show="newFeed.url.$dirty && newFeed.url.$invalid">
+				<small class="error" ng-show="newFeed.url.$error.required">
+					{{L('Url is required!')}}
+				</small>
+				<small class="error" ng-show="newFeed.url.$error.pattern">
+				     {{L('Please enter valid url!')}}
+				</small>
+				<small class="error" ng-show="newFeed.url.$error.minlength">
+				        {{L('Url needs to be at least 4 characters long!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-show="modalOptions.show">
+			<h4>{{L('Url')}} :</h4>
+			<p><a href="{{data.url}}" target="_blank">{{data.url}}</a></p>
+		</li>
+		
+		</ul>
+	</form>
+<div ng-show="modalOptions.remove" >
+	<h4>{{L('Are you sure you want to remove this url?')}}</h4>
+	<p>{{data.url}}</p>
+</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn" ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
+  <button type="submit" ng-hide="modalOptions.show" ng-click="modalOptions.ok(this)" ng-disabled='newFeed.$invalid && !modalOptions.remove' class="btn btn-primary" >{{modalOptions.actionButtonText}}</button>
+</div>

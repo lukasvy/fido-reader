@@ -1,0 +1,171 @@
+<div>
+	<tabset>
+		<tab>
+			<tab-heading>
+			<i class="icon-list"></i> Rss Feeds
+        	</tab-heading>        	
+        	<div ng-controller="feedsCtrl">
+
+        	<table ng-table="tableParams" class="table table-bordered">
+        		<div class="control-group">
+        		<button class="btn" ng-click="newFeed()">New</button>
+        		<button class="btn" ng-click="refresh()">Refresh</button>
+<lv-loading cog=1 ng-show="loading"></lv-loading>
+        		<div class="input-append pull-right">
+	        		<input type="text"  placeholder="Search" ng-model="searchInput"/>
+    	        		<button class="btn" type="button" ng-click="cancel()" ><i class="icon-search" ng-hide="searchInput"></i><i class="icon-remove" ng-show="searchInput"></i></button>
+        		</div>
+        		</div>
+	        	<tr ng-repeat="feed in $data">
+	        		<td data-title="'Id'" sortable="id" width="3%">{{feed.id}}</td>
+	        		<td data-title="'Url'" sortable="url" width="50%"><span class="">{{feed.url}}</span></td>
+	        		<td data-title="'Tags'" width="30%"><span class="ellipsis">{{feed.tags}}</span></td>
+	        		<td data-title="'Actions'" width="17%" align="center">
+	        			<button class="btn" ng-click="show(feed.id)" ><i class="icon-eye-open" ></i></button>
+	        			<button class="btn" ng-click="edit(feed.id)" ><i class="icon-edit" ></i></button> 
+	        			<button class="btn" ng-click="remove(feed.id)" ><i class="icon-remove-sign"></i></button> 
+	        			</td>
+	        	</tr>
+        	</table>
+
+        	</div>
+		</tab>
+		<tab>
+			<tab-heading>
+			<i class="icon-tags"></i> Tags
+        	</tab-heading>	
+        	
+        	<div ng-controller="tagsCtrl">
+	        	<table ng-table="tableParams" class="table table-bordered">
+	        		<div class="control-group">
+	        		<button class="btn" ng-click="newTag()">New</button>
+	        		<button class="btn" ng-click="refresh()">Refresh</button>
+<lv-loading cog=1 ng-show="loading"></lv-loading>
+	        		<div class="input-append pull-right">
+		        		<input type="text"  placeholder="Search" ng-model="searchInputTags"/>
+		        		<button class="btn" type="button" ng-click="tagsCancel()"><i class="icon-search" ng-hide="searchInputTags"></i><i class="icon-remove" ng-show="searchInputTags"></i></button>
+	        		</div>
+	        		</div>
+		        	<tr ng-repeat="tag in $data">
+		        		<td data-title="'Id'" width="10%" sortable="id">{{tag.id}}</td>
+		        		<td data-title="'Tag'" sortable="tag" >{{tag.tag}}</td>
+		        		<td data-title="'Created'" width="20%" sortable="created_at" width="30%">{{tag.created_at}}</td>
+		        		<td data-title="'Active'" width="10%" sortable="active">{{tag.active}}</td>
+		        		<td data-title="'Actions'" width="5%" align="center">
+		        			<!--<button class="btn" ng-click="show(tag.id)"><i class="icon-eye-open"></i></button>-->
+		        			<button ng-show="tag.active" class="btn"  ng-click="lock(tag.id)"><i class="icon-lock"></i></button> 
+		        			<button ng-hide="tag.active" class="btn"  ng-click="unlock(tag.id)"><i class="icon-unlock"></i></button> 
+		        			</td>
+		        	</tr>
+	        	</table>
+        	</div>	
+        	
+        		
+		</tab>
+		<tab>
+			<tab-heading>
+			<i class="icon-user"></i> Users
+        	</tab-heading>	
+        	<div ng-controller="usersCtrl">
+	        	<table ng-table="tableParams" class="table table-bordered">
+	        		<div class="control-group">
+	        		<button class="btn" ng-click="newUser()">New</button>
+	        		<button class="btn" ng-click="refresh()">Refresh</button>
+	        		<lv-loading cog=1 ng-show="loading"></lv-loading>
+	        		<div class="input-append pull-right">
+		        		<input type="text"  placeholder="Search" ng-model="searchInputUsers"/>
+		        		<button class="btn" type="button" ng-click="usersCancel()"><i class="icon-search" ng-hide="searchInputUsers"></i><i class="icon-remove" ng-show="searchInputUsers"></i></button>
+	        		</div>
+	        		</div>
+		        	<tr ng-repeat="user in $data">
+		        		<td data-title="'Id'" sortable="id">{{user.id}}</td>
+		        		<td data-title="'First Name'" sortable="first_name" >{{user.first_name}}</td>
+		        		<td data-title="'Last Name'" sortable="last_name">{{user.last_name}}</td>
+		        		<td data-title="'Username'" sortable="username">{{user.username}}</td>
+		        		<td data-title="'Email'" sortable="email">{{user.email}}</td>
+		        		<td data-title="'Role'" sortable="role">{{user.role}}</td>
+		        		<td data-title="'Active'" sortable="active">{{user.active}}</td>
+		        		<td data-title="'Actions'" width="17%" align="center">
+		        			<button class="btn" ng-click="show(user.id)"><i class="icon-eye-open"></i></button>
+		        			<button class="btn" ng-click="edit(user.id)"><i class="icon-edit" ></i></button> 
+		        			<button ng-show="user.active" class="btn"  ng-click="lock(user.id)"><i class="icon-lock"></i></button> 
+		        			<button ng-hide="user.active" class="btn"  ng-click="unlock(user.id)"><i class="icon-unlock"></i></button> 
+		        			</td>
+		        	</tr>
+	        	</table>
+        	</div>	
+		</tab>
+		<tab>
+			<tab-heading>
+			<i class="icon-dashboard"></i> Statistics
+        	</tab-heading>		
+		<div ng-controller="statisticsCtrl">
+        	<div class="row-fluid" style="width:100%" >
+        		<span class="span8">
+        			<span><h4>Tick</h4>
+        			<!--<lv-loading cog="true" ng-show="loading"></lv-loading> -->
+        			</span>
+        			<div class="table-responsive">
+        				<table class="table table-striped">
+	        				<tr>
+		        				<td><small><b>Last Run</b></small></td>
+		        				<td><small><b>Feeds Checked</b></small></td>
+		        				<td><small><b>Articles Fetched</b></small></td>
+		        				<td><small><b>Tags Matched</b></small></td>
+		        				<td><small><b>Tags Created</b></small></td>
+		        				<td><small><b>Duration</b></small></td>
+	        				</tr>
+	        				<tr ng-repeat="part in tick">
+		        				<td><small>{{part.created_at}}</small></td>
+		        				<td><small>{{part.feeds_checked}}</small></td>
+		        				<td><small>{{part.articles_retrieved}}</small></td>
+		        				<td><small>{{part.tags_matched}}</small></td>
+		        				<td><small>{{part.tags_created}}</small></td>
+		        				<td><small>{{part.duration}}</small></td>
+	        				</tr>
+        				</table>
+        			</div>
+        		</span>
+        		<span class="span3">
+        			<h4>Total</h4>
+        			<div class="table-responsive">
+        				<table class="table table-striped">
+	        				<tr>
+		        				<td><small>Feeds</small></td>
+		        				<td><small>Articles</small></td>
+		        				<td><small>Tags</small></td>
+	        				</tr>
+	        				<tr>
+		        				<td><small>{{data.feeds}}</small></td>
+		        				<td><small>{{data.articles}}</small></td>
+		        				<td><small>{{data.tags}}</small></td>
+	        				</tr>
+        				</table>
+        			</div>
+        		</span>
+			</div>
+			<div class="row-fluid" style="width:100%" >
+			<span class="span8">
+                                <h4>Access Log</h4>
+                                <div class="table-responsive">
+                                        <table class="table table-striped">
+                                                <tr>
+                                                        <td><small><b>Date / Time</b></small></td>
+                                                        <td><small><b>Type</b></small></td>
+                                                        <td><small><b>User</b></small></td>
+							<td><small><b>Ip</b></small></td>
+                                                </tr>
+						<tr ng-repeat="part in access">
+                                                        <td><small>{{part.created_at.date}}</small></td>
+							<td><small>{{part.type}}</small></td>
+                                                        <td><small>{{part.user.username}}</small></td>
+                                                        <td><small>{{part.ip}}</small></td>
+                                                </tr>
+                                        </table>
+                                </div>
+                        </span>
+			</div>
+        	</div>
+		</tab>
+	</tabset>
+</div>

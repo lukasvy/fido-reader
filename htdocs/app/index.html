@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Fido</title>
+    <link rel="stylesheet" href="/css/bootstrap-old.css">
+    <link rel="stylesheet" href="/css/desktop-app.css">
+
+    <link rel="stylesheet" href="/js/vendors/snap/snap.css">
+    <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.min.css">
+    <script src="/js/vendors/jquery.js"></script>
+</head>
+<body>
+    <lv-snapper>
+        <lv-snapper-content>
+            <div class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <div class="span12">
+                        <lv-snapper-toggler side="left" class="pull-left menu"><a href=""><i class="icon-reorder"> Menu</i></a></lv-snapper-toggler>
+                        <lv-snapper-toggler side="right" class="pull-right menu"><a href="">Login<i class="icon-user"></i></a></lv-snapper-toggler>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+             </div>
+        </lv-snapper-content>
+        <lv-snapper-menu side="left" class="menu-drawer">
+            <lv-search type="main-search" width="100">Search</lv-search>
+            <ul>
+                <li><a href="">World News</a></li>
+                <li><a href="">Science</a></li>
+                <li><a href="">Art</a></li>
+                <li><a href="">Sport</a></li>
+                <li><a href="">Gossip</a></li>
+            </ul>
+        </lv-snapper-menu>
+        <lv-snapper-menu side="right" class="menu-drawer">
+            <lv-login-form ng-hide="user.loggedIn()"/>
+        </lv-snapper-menu>
+    </lv-snapper>
+
+<!-- ANGULAR SCRIPTS -->
+<script src="js/vendors/angular-latest.js"></script>
+<script src="js/vendors/angular-ui-bootstrap.js"></script>
+<script src="js/app/menu/menu-app.js"></script>
+<script src="js/app/common/template/template.js"></script>
+<script src="js/app/common/lexicon/lexicon.js"></script>
+<script src="js/app/common/modal/modal.js"></script>
+<script src="js/app/common/search/search.js"></script>
+<script src="js/app/common/error/error.js"></script>
+<script src="js/app/menu/menu-directives.js"></script>
+<script src="js/app/menu/login/login-app.js"></script>
+<script src="js/app/app.js"></script>
+
+</body>
+</html>

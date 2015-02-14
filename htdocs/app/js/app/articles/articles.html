@@ -1,0 +1,14 @@
+<div>
+<div class="options-row row-fluid"><button class="btn pull-right"><i class="icon-list"></i></button>
+
+</div>
+<div class="articles" ng-repeat="part in data">
+	<!--<h3><a ng-href="#/article?id={{part.id}}" ng-click="showArticle()">{{part.title}}</a></h3>-->
+	<h3 ng-class="{read : part.user_read}"><a href="" ng-click="showArticle({{part.id}},{{$index}})">{{part.title}}</a></h3>
+	<p>{{part.desc}}</p>
+	<p>{{part.contentSnippet}}</p>
+	<small>{{part.created_at}}</small> <small ng-show="part.source">{{part.source}}</small>
+</div>
+<div ng-hide="noMoreData"><button class="btn" ng-click="showMore()" ng-hide="loading">{{L('Show more ...')}}</button><button class="btn" disabled  ng-show="loading"><i class="fa fa-cog fa-spin"></i> {{loadingText}}</button></div>
+<div ng-show="error">{{L('No data to show')}}</div>
+</div>

@@ -1,0 +1,40 @@
+<div>
+<div class="modal-header">
+  <h3>{{modalOptions.headerText}}</h3>
+</div>
+<div class="modal-body">
+<div class="loading" ng-show="modalOptions.loading"><lv-loading></lv-loading></div>
+<div ng-hide="modalOptions.loading">
+
+	<form name="newTag" novalidate ng-hide="modalOptions.remove">
+		<ul class="formlist">
+		<li ng-hide="modalOptions.show">
+			<label for="tags">{{L('Tags')}} :</label>
+			<textarea size="80" name="tags" ng-model="data.tags" type="text" required ng-minlength=3 ng-pattern="/^[-_a-zA-Z0-9, ]+$/">
+			</textarea>
+			<div class="error" ng-show="newTag.tags.$dirty && newFeed.tags.$invalid">
+				<small class="error" ng-show="newTag.tags.$error.required">
+				        {{L('Tags are required!')}}
+				</small>
+				<small class="error" ng-show="newTag.tags.$error.minlength">
+				        {{L('Minimum tag length is 3 characters!')}}
+				</small>
+				<small class="error" ng-show="newTag.tags.$error.pattern">
+				        {{L('Please make sure that tags are written as words divided by commas.')}}
+				</small>
+			</div>
+		</li>
+		</ul>
+	</form>
+</div>
+<div ng-show="modalOptions.remove">
+	<h4 ng-show="modalOptions.lock">{{L('Are you sure you want to lock this tag?')}}</h4>
+	<h4 ng-show="modalOptions.unlock">{{L('Are you sure you want to unlock this tag?')}}</h4>
+	<p>{{data.tag}}</p>
+</div>
+</div>
+<div class="modal-footer">
+<lv-loading cog="1" ng-show="modalOptions.disableSubmit"></lv-loading>
+  <button type="button" class="btn" ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
+  <button type="submit" ng-hide="modalOptions.show || modalOptions.loading" ng-click="modalOptions.ok(this)" ng-disabled='(newUser.$invalid && !modalOptions.remove && !modalOptions.edit) || (modalOptions.edit && newUser.confirmpassword.$invalid) || modalOptions.disableSubmit' class="btn btn-primary" >{{modalOptions.actionButtonText}}</button>
+</div>

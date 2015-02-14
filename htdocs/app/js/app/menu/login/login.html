@@ -1,0 +1,24 @@
+<div>
+<form class="form.horizontal" ng-show="notloggedin">
+    <div class="control-group">
+        <div class="controls">
+            <input type="text" name="username" placeholder="{{L('login.username')}}" class="form-control" ng-model="username">
+        </div>
+        <div class="controls">
+            <input type="password" name="password" autocomplete="off" placeholder="{{L('login.password')}}" class="form-control" ng-model="password">
+        </div>
+        <div class="controls">
+            <button class="btn btn-primary form-control" value="Log In" ng-click="submit()" ng-disabled="loading">{{L('login.submit')}}</button>
+             <lv-loading cog=1 ng-show="loading"></lv-loading>
+        </div>
+       
+        <lv-error ng-repeat = "error in errors">{{error}}</lv-error>
+    </div>
+</form>
+
+<ul ng-hide="notloggedin">
+	<li ng-show="isadmin"><a ng-href="#/admin">Admin</a></li>
+	<li><a ng-href="#/myaccount">{{L('myaccount')}}</a></li>
+	<li><a href="" ng-click="logout()">{{L('login.logout')}}</a></li>
+</ul>
+<div>

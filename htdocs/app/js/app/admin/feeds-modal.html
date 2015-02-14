@@ -1,0 +1,74 @@
+<div>
+<div class="modal-header">
+  <h3>{{modalOptions.headerText}}</h3>
+</div>
+<div class="modal-body">
+<div class="loading" ng-show="modalOptions.loading"><lv-loading></lv-loading></div>
+<div ng-hide="modalOptions.loading">
+	<form name="newFeed" novalidate ng-hide="modalOptions.remove">
+		<ul class="formlist">
+		<li ng-hide="modalOptions.show">
+			<label for="url">{{L('Url')}} :</label>
+			<input size="80" name="url" ng-model="data.url" type="url" required ng-minlength=4 ng-pattern="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" value="{{data.url}}" ng-disabled={{modalOptions.edit}}>
+			<div class="error" ng-show="newFeed.url.$dirty && newFeed.url.$invalid">
+				<small class="error" ng-show="newFeed.url.$error.required">
+					{{L('Url is required!')}}
+				</small>
+				<small class="error" ng-show="newFeed.url.$error.pattern">
+				     {{L('Please enter valid url!')}}
+				</small>
+				<small class="error" ng-show="newFeed.url.$error.minlength">
+				        {{L('Url needs to be at least 4 characters long!')}}
+				</small>
+			</div>
+		</li>
+		<li ng-show="modalOptions.show">
+			<h4>{{L('Url')}} :</h4>
+			<p><a href="{{data.url}}" target="_blank">{{data.url}}</a></p>
+		</li>
+		<li ng-hide="modalOptions.show">
+			<label for="tags">{{L('Tags')}} :</label>
+			<textarea size="80" name="tags" ng-model="data.tags" type="text" required ng-minlength=3 ng-pattern="/^[-_a-zA-Z0-9, ]+$/">
+			</textarea>
+			<div class="error" ng-show="newFeed.tags.$dirty && newFeed.tags.$invalid">
+				<small class="error" ng-show="newFeed.tags.$error.required">
+				        {{L('Tags are required!')}}
+				</small>
+				<small class="error" ng-show="newFeed.tags.$error.minlength">
+				        {{L('Minimum tag length is 3 characters!')}}
+				</small>
+				<small class="error" ng-show="newFeed.tags.$error.pattern">
+				        {{L('Please make sure that tags are written as words divided by commas.')}}
+				</small>
+			</div>
+		<li ng-show="modalOptions.show">
+			<h4>{{L('Tags')}} :</h4>
+			<p>{{data.tags}}</p>
+		</li>
+		
+		<li ng-show="modalOptions.show">
+			<table width="80%" class="table tbl">
+			    <tr>
+				<td width="50%">{{L('Total articles')}}</td>
+				<td>{{data.no_articles}}<td>
+			    </tr>
+			    <tr>
+                                <td width="50%">{{L('Total tags')}}</td>
+                                <td>44444<td>
+                            </tr>
+			</table>
+                </li>
+
+		</ul>
+	</form>
+</div>
+<div ng-show="modalOptions.remove" >
+	<h4>{{L('Are you sure you want to remove this url?')}}</h4>
+	<p>{{data.url}}</p>
+</div>
+</div>
+<div class="modal-footer">
+<lv-loading cog="1" ng-show="modalOptions.disableSubmit"></lv-loading>
+  <button type="button" class="btn" ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
+  <button type="submit" ng-hide="modalOptions.show  || modalOptions.loading" ng-click="modalOptions.ok(this)" ng-disabled='(newFeed.$invalid && !modalOptions.remove) || modalOptions.disableSubmit' class="btn btn-primary" >{{modalOptions.actionButtonText}}</button>
+</div>
