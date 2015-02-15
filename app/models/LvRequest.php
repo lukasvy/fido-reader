@@ -1,10 +1,13 @@
 <?php 
 
+use Illuminate\Http\Request as Request;
+
 class LvRequest {
 	
 	var $request;
 	
 	public function __construct () {
+
 		if ($get = Input::all()) {
 			// check for specific input
 			$this->request = $get;
@@ -13,12 +16,18 @@ class LvRequest {
 			return false;
 		}
 		// filter queries here
-		
+	}
+
+	public function getClientIp () {
+		return Input::getClientIp();
 	}
 	
 	public function get ($specific_input = null) {
 		if ($specific_input) 
 		{
+			if (Input::get($specific_input)) {
+				return Input::get($specific_input);
+			}
 			if ($this->request && array_key_exists($specific_input, $this->request)) {
 				return $this->request[$specific_input];
 			}

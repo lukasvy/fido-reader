@@ -89,46 +89,7 @@ Route::any('/checkuser', function(){
 Route::any('/test', function(){
 });
 
-Route::post('/login', function(){
-	$res = false;
-	$request = new LvRequest();
-	$credentials = array(
-            "username" => $request->get("username"),
-            "password" => $request->get("password")
-        );
-    if (Auth::attempt($credentials))
-    {
-    	$feeds = 0;
-    	$user = Auth::user();
-    	Cache::put($user->username.$user->email, new DateTime(),1);
-    	$user_feeds = Feed::get_user_feeds($user);
-    	if ($user_feeds){
-	    	$feeds = $user_feeds;
-    	}
-	if ($user) {
-            $access_log = new AccessLog();
-            $access_log->user_id = $user->id;
-            $access_log->type = 1; //login
-            $access_log->ip = Request::getClientIp();
-            $access_log->save();
-        }
-
-    	$res = new LvResponse(array('user' => 
-    			array('username' => Auth::user()->username,
-    				  'email'	 => Auth::user()->email,
-    				  'role'  	 => Auth::user()->role
-    				  
-    			),
-    			'feeds' => $feeds
-    			));
-    	return $res->respond();
-    }
-    // test response 
-    if (!$res){
-    	$res = new LvResponse(array());
-    }
-    return $res->respond();
-});
+Route::post('/login', 'LoginController@login');
 
 Route::get('/login', function(){
 	return Redirect::to('/');

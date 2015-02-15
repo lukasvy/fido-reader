@@ -80,8 +80,8 @@ function($location, lvHttp,lvRegistry,$timeout){
 			}
 		},
 		
-		logIn : function (username,password, callback) {
-			var request = lvHttp('login',{username : username, password : password});
+		logIn : function (username, password, callback) {
+			var request = lvHttp('login', {username : username, password : password});
 			return request.then(function(response) {
 				if (response.data.user) {
 		        	currentUser = response.data.user;

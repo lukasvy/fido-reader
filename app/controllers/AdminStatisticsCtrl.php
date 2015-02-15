@@ -12,7 +12,12 @@ class AdminStatisticsCtrl extends \BaseController {
 				->orderBy('created_at','desc')
 				->get()
 				->toArray();
-		$access_log = AccessLog::whereActive(true)->orderBy('created_at','desc')->take(10)->get();
+		$access_log = [];
+		try {
+			$access_log = AccessLog::whereActive(true)->orderBy('created_at','desc')->take(10)->get();
+		} catch (Exception $e) {
+
+		}
 		$log_info = array();
 		foreach ($access_log as $log) {
 		    $user = array();
