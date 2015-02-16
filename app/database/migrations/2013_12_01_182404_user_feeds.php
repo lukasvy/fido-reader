@@ -15,8 +15,8 @@ class UserFeedsTable extends Migration {
 		Schema::create('user_feeds', function(Blueprint $table) {
 			$table->increments('id');
 			$table->timestamps();
-			$table->integer('user_id')->unsigned();
-			$table->integer('feed_id')->unsigned();
+			$table->integer('user_id')->unsigned()->index();
+			$table->integer('feed_id')->unsigned()->index();
 			$table->boolean('active')->default('true');
 			$table->foreign('feed_id')->references('id')->on('feeds')
 						->onDelete('restrict')

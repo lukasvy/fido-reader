@@ -8,7 +8,7 @@ class CreateTagsTable extends Migration {
 	public function up()
 	{
 		Schema::create('tags', function(Blueprint $table) {
-			$table->increments('id');
+			$table->increments('id')->index();
 			$table->timestamps();
 			$table->string('tag')->index();
 			$table->boolean('active')->default('true');

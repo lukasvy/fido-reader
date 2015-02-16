@@ -15,9 +15,9 @@ class AccessLogTable extends Migration {
 		 Schema::create('access_log', function(Blueprint $table) {
                         $table->increments('id');
                         $table->timestamps();
-                        $table->integer('user_id')->unsigned();
+                        $table->integer('user_id')->unsigned()->index();
                         $table->integer('type')->unsigned();
-			$table->string('ip')->unsigned();
+			$table->string('ip')->unsigned()->index();
                         $table->boolean('active')->default('true');
                 });
 

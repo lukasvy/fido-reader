@@ -51,45 +51,24 @@ Route::group(array('before' => 'authUser'), function(){
 
 });
 
-Route::any('/checkuser', function(){
-	if (Auth::check()) {
-	    $user = Auth::user();
-	    $feeds = 0;
-	    if ($user){
-	    	$feeds = 0;
-	    	$user_feeds = false;
-	    	$user_feeds = Feed::get_user_feeds($user);
-	    	$allUnread = 0;
-	    	if ($user_feeds){
-		    	$feeds = $user_feeds;
-		    	foreach ($feeds as $feed) {
-			    	if ($feed['unread']) {
-				    	$allUnread += $feed['unread'];
-			    	}
-		    	}
-	    	}
-		    $response = new LvResponse(array('user' => 
-    			array('username' => $user->username,
-    				  'email'	 => $user->email,
-    				  'role'  	 => $user->role
-    				  
-    			),
-    			'feeds' => $feeds,
-    			'allUnread' => $allUnread
-    			));
-    		return $response->respond();
-	    }
-	}
-	$response = new LvResponse(array());
-	return $response->respond();
-});
+Route::any('/checkuser', 'CheckUserCtrl@checkUser');
 
 
 
 Route::any('/test', function(){
+	$test = false;
+	//Kint::dump(Feed::first()->tags->lists('tag'));
+	//Debugbar::info(Feed::first()->tags->lists('tag'));
+	//Kint::dump(User::find(5)->feeds->lists('id'));
+	//$test = User::find(5)->feeds;
+	$test = App::make('FeedRepo');
+	$test = $test->getUserFeeds(User::find(5));
+	#var_dump($test);
+	Kint::dump($test);
+	
 });
 
-Route::post('/login', 'LoginController@login');
+Route::post('/login', 'LoginCtrl@login');
 
 Route::get('/login', function(){
 	return Redirect::to('/');

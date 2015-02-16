@@ -19,5 +19,7 @@ class AccessRepo
 			$this->access->ip      = $ip;
 			$this->access->save();
 		}
+
+		return $this;
 	}
 }

@@ -10,8 +10,8 @@ class CreateTagCmpTable extends Migration {
 		Schema::create('tag_cmp', function(Blueprint $table) {
 			$table->increments('id');
 			$table->timestamps();
-			$table->integer('tag_id1')->unsigned();
-			$table->integer('tag_id2')->unsigned();
+			$table->integer('tag_id1')->unsigned()->index();
+			$table->integer('tag_id2')->unsigned()->index();
 			$table->integer('cmp')->default(0);
 			$table->boolean('active')->default('true');
 		});

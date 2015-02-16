@@ -5,7 +5,9 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.0.*",
-		"anahkiasen/underscore-php" : "dev-master"
+		"anahkiasen/underscore-php" : "dev-master",
+		"raveren/kint": "0.9.*@dev",
+		"barryvdh/laravel-debugbar": "~1.8"
 	},
 	"autoload": {
 		"classmap": [

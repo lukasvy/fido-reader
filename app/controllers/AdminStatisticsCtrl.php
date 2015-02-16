@@ -22,7 +22,10 @@ class AdminStatisticsCtrl extends \BaseController {
 		foreach ($access_log as $log) {
 		    $user = array();
 		    if ($log->user_id) {
-			$user = User::whereActive(true)->select('email','username')->whereId($log->user_id)->first()->toArray();
+				$user = User::whereActive(true)->select('email','username')->whereId($log->user_id)->first();
+				if ($user) {
+					$user = $user->toArray();
+				}
 		    }
 		    
 		    $type = 0;

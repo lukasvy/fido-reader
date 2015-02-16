@@ -16,23 +16,25 @@ class LvResponse {
 			$this->response = array($array);
 			return $this;
 		}
-		return $this;
 	}
 	
 	public function respond () {
 		return json_encode($this->response);
 	}
 
-	public function sendUserAuthResponse ($feeds = array()) {
+	public function setAuthResponse ($user, $feeds = array(), $allUnread = 0) {
 		$this->setResponse(
     		array('user' => 
-    			array('username' => Auth::user()->username,
-    				  'email'	 => Auth::user()->email,
-    				  'role'  	 => Auth::user()->role
+    			array('username' => $user->username,
+    				  'email'	 => $user->email,
+    				  'role'  	 => $user->role
     				  
     			),
-    			'feeds' => $feeds
-	    ))->respond();
+    			'feeds' => $feeds,
+    			'allUnread' => $allUnread
+	    ));
+
+	    return $this;
 	}
 	
 }

@@ -10,8 +10,8 @@ class CreateFeedTagsTable extends Migration {
 		Schema::create('feed_tags', function(Blueprint $table) {
 			$table->increments('id');
 			$table->timestamps();
-			$table->integer('feed_id')->unsigned();
-			$table->integer('tag_id')->unsigned();
+			$table->integer('feed_id')->unsigned()->index();
+			$table->integer('tag_id')->unsigned()->index();
 			$table->boolean('active')->default('true');
 		});
 	}

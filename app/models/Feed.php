@@ -12,10 +12,21 @@ class Feed extends Eloquent {
         'url'  => 'Required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
     );
 	
-	public static function validate($input='')
-	{
+	public static function validate($input='') {
 		$rules = self::$rules;
 		return Validator::make($input, $rules);
+	}
+
+	/**
+	 * Get the tags for feed
+	 * @return BelongsToMany
+	 */
+	public function tags () {
+		return $this->belongsToMany('Tag','feed_tags');
+	}
+
+	public function users () {
+		return $this->belongsToMany('User','user_feeds','feed_id','user_id');
 	}
 	
 	public static function get_user_feeds($user) {
@@ -27,7 +38,7 @@ class Feed extends Eloquent {
 				$feeds_ids = Arrays::pluck($feeds,'feed_id');
 				if ($feeds_ids) {
 					$feeds = self::whereActive(true)
-							 ->whereIn('id',$feeds_ids)
+							 ->whereIn('id', $feeds_ids)
 							 ->select('id','url','name')
 							 ->get()
 							 ->toArray();

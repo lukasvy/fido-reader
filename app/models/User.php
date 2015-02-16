@@ -11,6 +11,7 @@ class User extends Eloquent {
         'last_name'  => 'regex:/[a-zA-Z\'_-]/',
         'role'		 => 'in:admin,user'
     );
+    
     private static $add_rules = array(
         'username'   => 'unique:users|regex:/[a-z0-9_-]{4}/',
         'first_name' => 'regex:/[a-zA-Z\'_-]/',
@@ -18,6 +19,10 @@ class User extends Eloquent {
         'email'		 => 'email|unique:users',
         'role'		 => 'in:admin,user'
     );
+
+    public function feeds () {
+    	return $this->belongsToMany('Feed','user_feeds','user_id','feed_id');
+    }
     
     public static function validate($input='',$er=false)
 	{

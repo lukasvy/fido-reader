@@ -13,10 +13,10 @@ class UserArticlesTable extends Migration {
 	public function up()
 	{
 		Schema::create('user_articles', function(Blueprint $table) {
-			$table->increments('id');
+			$table->increments('id')->index();
 			$table->timestamps();
-			$table->integer('user_id')->unsigned();
-			$table->integer('article_id')->unsigned();
+			$table->integer('user_id')->unsigned()->index();
+			$table->integer('article_id')->unsigned()->index();
 			$table->boolean('active')->default('true');
 			$table->foreign('article_id')->references('id')->on('articles')
 						->onDelete('restrict')
