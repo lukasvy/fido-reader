@@ -21,7 +21,8 @@ class LoginCtrl extends BaseController {
 	    );
 
 	    if (Auth::attempt($credentials)) {
-	    	$this->user = User::find(Auth::user()->id);
+	    	$this->user = User::find(
+	    		Auth::user()->id);
 	    }
 	}
 
