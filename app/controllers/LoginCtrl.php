@@ -1,6 +1,6 @@
 <?php
 /**
- * Class deals with logging in of users
+ * Class deals with logging in users
  * @Lukas Vyslocky 2015
  */
 class LoginCtrl extends BaseController {
