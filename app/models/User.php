@@ -6,12 +6,20 @@ class User extends Eloquent {
 	public $timestamps = true;
 	protected $softDelete = false;
 
+	/**
+	 * Editing rules
+	 * @var array
+	 */
 	private static $edit_rules = array(
         'first_name' => 'regex:/[a-zA-Z\'_-]/',
         'last_name'  => 'regex:/[a-zA-Z\'_-]/',
         'role'		 => 'in:admin,user'
     );
     
+    /**
+     * Adding rules
+     * @var array
+     */
     private static $add_rules = array(
         'username'   => 'unique:users|regex:/[a-z0-9_-]{4}/',
         'first_name' => 'regex:/[a-zA-Z\'_-]/',
@@ -20,10 +28,39 @@ class User extends Eloquent {
         'role'		 => 'in:admin,user'
     );
 
+    /**
+     * DB relation
+     * @return BelongsToMany
+     */
     public function feeds () {
-    	return $this->belongsToMany('Feed','user_feeds','user_id','feed_id');
+    	return $this->belongsToMany('Feed','user_feeds','user_id','feed_id')
+    	            ->where('user_feeds.active',true);
+    }
+
+    /**
+     * DB relation
+     * @return BelongsToMany
+     */
+    public function tags () {
+    	return $this->belongsToMany('Tag','user_tags','user_id','tag_id')
+    	            ->where('user_tags.active',true);
+    }
+
+    /**
+     * DB relation
+     * @return BelongsToMany
+     */
+    public function articles () {
+    	return $this->belongsToMany('Article','user_articles','user_id','article_id')
+    	            ->where('user_articles.active',true);
     }
     
+    /**
+     * Validator function
+     * @param  string $input
+     * @param  boolean $er which set of rules to use
+     * @return Validator
+     */
     public static function validate($input='',$er=false)
 	{
 		if ($er) {
@@ -32,6 +69,30 @@ class User extends Eloquent {
 			$rules = self::$add_rules;
 		}
 		return Validator::make($input, $rules);
+	}
+
+	/**
+	 * Retrieves all feeds with number of unread articles
+	 * @param  boolean $array used to convert result to array
+	 * @return mixed[json|stObject]
+	 */
+	public function getUserFeedArticles ($array = false) {
+		$query = "SELECT f.id, f.url, f.name,
+				(SELECT count(DISTINCT a.id) FROM articles a WHERE a.active AND a.feed_id = f.id 
+					AND a.id NOT IN (SELECT article_id FROM user_articles WHERE user_id = u.id)
+					) as unread
+				FROM feeds f
+				JOIN user_feeds uf ON (uf.feed_id = f.id)
+				JOIN users u ON (uf.user_id = u.id)
+				LEFT JOIN user_articles ua ON (ua.user_id = u.id)
+				WHERE u.id = ?
+				group by f.id,f.url,f.name,u.id";
+		$result = DB::select($query, array($this->id));
+		if ($array) {
+			return json_decode(json_encode($result), true);
+		} else {
+			return $result;
+		}
 	}
 	
 	public static function get_user_tags ($id = NULL) {
@@ -96,7 +157,7 @@ class User extends Eloquent {
 		return 1;
 	}
 	
-		// returns unber of unread articles for user within the feed
+	// returns unber of unread articles for user within the feed
 	public static function get_no_of_unread($user, $feed_id = NULL) {
 		if (!$user || !$feed_id) return false;
 		$unread = 0;

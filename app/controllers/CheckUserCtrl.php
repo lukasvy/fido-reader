@@ -12,7 +12,7 @@ class CheckUserCtrl extends \BaseController {
 		$this->feedRepo = $feedRepo;
 
 		if (Auth::check()) {
-			$this->user = Auth::user();
+			$this->user = User::find(Auth::user()->id);
 		}
 	}
 
@@ -20,10 +20,7 @@ class CheckUserCtrl extends \BaseController {
 		$res = false;
 
 		if ($this->user) {
-		    $feeds 	= $this->feedRepo
-		    			   ->getUserFeeds($this->user);
-			$res 	= $this->response
-						   ->setAuthResponse($this->user, $feeds['feeds'], $feeds['allUnread']);
+			$res = $this->response->setAuthResponse($this->user);
 		}
 
 		if (!$res) {

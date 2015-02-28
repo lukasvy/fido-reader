@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class that deals with all feeds
+ */
 class FeedRepo {
 
 	private $userModel;
@@ -12,20 +14,21 @@ class FeedRepo {
 		$this->feedModel 	= $feedModel;
 	}
 
+	/**
+	 * Retrieve user feeds
+	 * @param  $user  user to take feeds from
+	 * @return array  feeds and all unread feeds
+	 */
 	public function getUserFeeds ($user) {
 		$allUnread = 0;
 		$feeds     = 0;
 		if ($user){
 	    	$feeds = 0;	
-	    	$userFeedIds = $user->feeds->lists('id');
-			if ($userFeedIds) {
-				$feeds = $this->feedModel
-					     ->whereActive(true)
-						 ->whereIn('id', $userFeedIds)
-						 ->select('id','url','name')
-						 ->get()
-						 ->toArray();
-			}
+	    	$feeds = $user->feeds;
+	    	if ($feeds) {
+	    		$feeds = $feeds->get('id','url','name')->toArray();
+	    	}
+			
 			if ($feeds){
 				// find read and unread articles
 				$unread = 0;

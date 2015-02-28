@@ -53,20 +53,26 @@ Route::group(array('before' => 'authUser'), function(){
 
 Route::any('/checkuser', 'CheckUserCtrl@checkUser');
 
+Route::any('/test','TestCtrl@test' );
 
-
-Route::any('/test', function(){
-	$test = false;
-	//Kint::dump(Feed::first()->tags->lists('tag'));
-	//Debugbar::info(Feed::first()->tags->lists('tag'));
-	//Kint::dump(User::find(5)->feeds->lists('id'));
-	//$test = User::find(5)->feeds;
-	$test = App::make('FeedRepo');
-	$test = $test->getUserFeeds(User::find(5));
-	#var_dump($test);
-	Kint::dump($test);
+// Route::any('/test', function(){
+// 	$test = false;
+// 	//Kint::dump(Feed::first()->tags->lists('tag'));
+// 	//Debugbar::info(Feed::first()->tags->lists('tag'));
+// 	//Kint::dump(User::find(5)->feeds->lists('id'));
+// 	//$test = User::find(5)->feeds;
+// 	//$test = App::make('FeedRepo');
+// 	//$test = $test->getUserFeeds(User::find(5));
+// 	#var_dump($test);
+// 	//$test = Feed::find(1)->articles->lists('id','title');
+// 	//Kint::dump($test);
+// 	// $test = User::find(5);
+// 	// if ($test) {
+// 	// 	$test = $test->tags->lists('id','tag');
+// 	// }
+// 	// Kint::dump($test);
 	
-});
+// });
 
 Route::post('/login', 'LoginCtrl@login');
 

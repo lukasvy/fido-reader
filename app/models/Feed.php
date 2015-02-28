@@ -25,6 +25,10 @@ class Feed extends Eloquent {
 		return $this->belongsToMany('Tag','feed_tags');
 	}
 
+	public function articles () {
+		return $this->hasMany('Article','feed_id')->whereActive(true);
+	}
+
 	public function users () {
 		return $this->belongsToMany('User','user_feeds','feed_id','user_id');
 	}

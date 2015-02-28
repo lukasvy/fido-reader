@@ -6,6 +6,14 @@ class Article extends Eloquent {
 	public $timestamps = true;
 	protected $softDelete = false;
 
+	public function feed () {
+		return $this->belongsTo('Feed','feed_id')->whereActive(true);
+	}
+
+	public function userArticles() {
+		//return $this->belongsToMany();
+	}
+
 	// return articles based on supplied tags
 	public static function all_from_tags($tags = NULL, $page = NULL, $offset = NULL) {
 		if (!$tags) {

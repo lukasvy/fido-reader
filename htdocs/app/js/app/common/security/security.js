@@ -14,7 +14,6 @@ function($location, lvHttp,lvRegistry,$timeout){
 	    var request = lvHttp('checkuser',{id : currentUser.id});
 		    request.then(function(response) {
 			    if (response.data.user) {
-				console.log(response);
 		        	currentUser = response.data.user;
 		        	currentUser.feeds = response.data.feeds;
 		        	currentUser.allUnread = response.data.allUnread;
@@ -24,14 +23,14 @@ function($location, lvHttp,lvRegistry,$timeout){
 			}
 		    });
 		}
-    }
+    };
 
     var again = function(){
         $timeout(function(){
                 API.refreshUser();
                 again();
         },10000);
-        }
+        };
     again();
 
     
@@ -50,7 +49,7 @@ function($location, lvHttp,lvRegistry,$timeout){
 			    return false;
 		    });
 		    return false;
-    }
+    };
 	var service = {
 		getCurrentUser : function() {
 			if (currentUser) {
@@ -124,4 +123,4 @@ function($location, lvHttp,lvRegistry,$timeout){
 		}
 	};
 	return service;
-}])
+}]);

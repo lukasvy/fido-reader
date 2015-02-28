@@ -1,13 +1,11 @@
 <?php 
 
-use Illuminate\Http\Request as Request;
-
-class LvRequest {
+class LvRequest extends BaseController{
 	
-	var $request;
+	private $request;
+	private $input;
 	
 	public function __construct () {
-
 		if ($get = Input::all()) {
 			// check for specific input
 			$this->request = $get;
