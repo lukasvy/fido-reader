@@ -1,8 +1,9 @@
 <?php 
 
-class LvRequest {
+class LvRequest extends BaseController{
 	
-	var $request;
+	private $request;
+	private $input;
 	
 	public function __construct () {
 		if ($get = Input::all()) {
@@ -13,12 +14,18 @@ class LvRequest {
 			return false;
 		}
 		// filter queries here
-		
+	}
+
+	public function getClientIp () {
+		return Input::getClientIp();
 	}
 	
 	public function get ($specific_input = null) {
 		if ($specific_input) 
 		{
+			if (Input::get($specific_input)) {
+				return Input::get($specific_input);
+			}
 			if ($this->request && array_key_exists($specific_input, $this->request)) {
 				return $this->request[$specific_input];
 			}

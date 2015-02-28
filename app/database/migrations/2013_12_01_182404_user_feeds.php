@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class UserFeeds extends Migration {
+class UserFeedsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -15,8 +15,8 @@ class UserFeeds extends Migration {
 		Schema::create('user_feeds', function(Blueprint $table) {
 			$table->increments('id');
 			$table->timestamps();
-			$table->integer('user_id')->unsigned();
-			$table->integer('feed_id')->unsigned();
+			$table->integer('user_id')->unsigned()->index();
+			$table->integer('feed_id')->unsigned()->index();
 			$table->boolean('active')->default('true');
 			$table->foreign('feed_id')->references('id')->on('feeds')
 						->onDelete('restrict')

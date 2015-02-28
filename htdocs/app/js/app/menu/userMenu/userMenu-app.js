@@ -36,22 +36,22 @@ function($scope,security,lvRegistry,L,openModal,T,Restangular){
 		    $scope.show = true;
 		    user = currentUser;
 	    }
-    }
+    };
     
 	var templates = {
 	    main : T('user.feed.modal'), 
-	}
+	};
 	
 	var lexicon = {
 	    headerTextShow : L('feed.form.showfeed'),
 	    headerTextEdit : L('feed.form.editfeed'),
 	    headerTextRemove : L('feed.form.removeFeed'),
 	    headerTextNew : L('feed.form.addnewfeed')
-    }
+    };
 
     $scope.newFeed = function() {
 		openModal(false,'new',API,templates,lexicon);
-	}
+	};
 	
 	
 }])
@@ -70,8 +70,8 @@ function($scope,security,lvRegistry,L,openModal,T,Restangular){
 	        		var that = this;
 		        	
 	        	}
-        	}
+        	};
         }
-    }
+    };
 
-}])
+}]);

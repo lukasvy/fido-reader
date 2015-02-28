@@ -91,7 +91,7 @@ function($location,Restangular,security){
 		if (path === '/admin' && !security.isAdmin()) {
 			$location.path('/');
 		}
-	}
+	};
 	$rootScope.$on("$routeChangeStart", function (event, next, current) {
 		//filter(next.$$route.originalPath);
 		lvRegistry.set($scope.loadingEvent,true);
