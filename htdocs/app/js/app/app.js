@@ -2,7 +2,7 @@ angular.module('myApp',
 ['ui.bootstrap','restangular',
  'common.lvHttp','T','common.registry','common.loading',
  'ngRoute','menu-app','container-app','myaccount-app','admin-app',
- 'search-app','common.security','article-app','feeds-app','userMenu','userArticles'
+ 'search-app','common.security','article-app','feeds-app','userMenu','userArticles','wu.masonry','infinite-scroll'
  ])
 
 .config(['templ','$routeProvider','$locationProvider',

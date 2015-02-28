@@ -1,14 +1,25 @@
 <div>
-<div class="options-row row-fluid"><button class="btn pull-right"><i class="icon-list"></i></button>
-
+<!--<div class="options-row row-fluid"><button class="btn pull-right"><i class="icon-list"></i></button>
+</div> -->
+<div id="wrapper">
+<div masonry masonry-options="{ transitionTransition: '0.4s' }">
+	<div class="masonry-brick articlelist " ng-repeat="part in data">
+		<a href="" ng-click="showArticle({{part.id}},{{$index}})"><img ng-src="{{part.media}}" ng-show="part.media"></img></a>
+		<div class="card-container">
+		<h3 ng-class="{read : part.user_read}"><a href="" ng-click="showArticle({{part.id}},{{$index}})">{{part.title}}</a></h3>
+		<!--<p>{{part.desc}}</p>-->
+		<p>{{part.contentSnippet}}</p>
+		<small>{{part.created_at}}</small><br> 
+		<small ng-show="part.source"><a href="" ng-click="addSource(part.source_url)">{{part.source}}</a></small>
+		</div>
+	</div>	
+</div>	
 </div>
-<div class="articles" ng-repeat="part in data">
-	<!--<h3><a ng-href="#/article?id={{part.id}}" ng-click="showArticle()">{{part.title}}</a></h3>-->
-	<h3 ng-class="{read : part.user_read}"><a href="" ng-click="showArticle({{part.id}},{{$index}})">{{part.title}}</a></h3>
-	<p>{{part.desc}}</p>
-	<p>{{part.contentSnippet}}</p>
-	<small>{{part.created_at}}</small> <small ng-show="part.source">{{part.source}}</small>
-</div>
-<div ng-hide="noMoreData"><button class="btn" ng-click="showMore()" ng-hide="loading">{{L('Show more ...')}}</button><button class="btn" disabled  ng-show="loading"><i class="fa fa-cog fa-spin"></i> {{loadingText}}</button></div>
-<div ng-show="error">{{L('No data to show')}}</div>
-</div>
+	<div ng-hide="noMoreData">
+		<button class="btn" ng-click="showMore()" ng-hide="loading">{{L('Show more ...')}}</button>
+		<button class="btn" disabled  ng-show="loading">
+		<i class="fa fa-cog fa-spin"></i> {{loadingText}}</button></div>
+	<div ng-show="noMoreData">{{L('No data to show.')}}</div>
+	<div ng-show="error">{{L('No data to show, please try again later.')}}</div>
+	</div>
+	

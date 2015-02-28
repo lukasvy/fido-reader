@@ -53,6 +53,7 @@ Loading...
 <script src="app/js/vendors/angular-latest.js"></script>
 <script src="app/js/vendors/angular-route.min.js"></script>
 <script src="app/js/vendors/ui-bootstrap-tpls-0.6.0.min.js"></script>
+<script src="app/js/vendors/masonry.js"></script>
 <script src="app/js/vendors/underscore-min.js"></script>
 <script src="app/js/vendors/restangular.js"></script>
 <script src="app/js/vendors/ng-table.js"></script>

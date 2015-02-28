@@ -151,6 +151,32 @@ overlay {
 	left : 200px;  
 }
 
+.masonry-brick {
+    margin: 1em;
+    display: none;
+    width: 220px;
+    margin: 10px;
+    float: left;
+}
+
+.masonry-brick.loaded {
+    display: block;
+    -webkit-box-shadow: 1px 1px 6px 1px rgba(235, 235, 235, 1);
+    -moz-box-shadow: 1px 1px 6px 1px rgba(153,153,153,1);
+    box-shadow: 1px 1px 6px 1px rgba(216, 216, 216, 1);
+    overflow : hidden;
+}
+
+.card-container {
+    padding : 4px;
+    display:block;
+}
+
+.card-container h3 {
+    line-height: 1.2em;
+}
+
+
 .articlemodal.fade.in {
 	top: 7%;
 }

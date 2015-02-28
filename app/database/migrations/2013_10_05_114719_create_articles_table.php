@@ -13,6 +13,7 @@ class CreateArticlesTable extends Migration {
 			$table->boolean('active')->default('true');
 			$table->integer('feed_id')->unsigned()->index();
 			$table->string('url');
+			$table->string('media')->default('');
 			$table->string('title')->index();
 		});
 	}

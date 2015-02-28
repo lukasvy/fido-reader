@@ -21,7 +21,7 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 			$scope.data[index].user_read = true;
 		}
 	    openModal(id,$scope.data[index]);
-	}		
+	};
 	$scope.showMore = function(){
 		$scope.loading = true;
 		page++;
@@ -46,7 +46,7 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 		.catch(function(){
 			$scope.loading = false;
 		});	
-	}
+	};
 
 	if (returndata.data.articles) {
 		$scope.data = returndata.data.articles;
@@ -55,5 +55,5 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 			$scope.noMoreData = true;
 		}
 	}
-}])
+}]);
 
