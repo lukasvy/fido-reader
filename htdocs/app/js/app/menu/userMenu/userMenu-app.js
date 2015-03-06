@@ -5,14 +5,21 @@ function($scope,security,lvRegistry,L,openModal,T,Restangular){
 	$scope.show = false;
 	$scope.L = L;
 	$scope.userFeeds = false;
+	$scope.user = false;
 	
+	lvRegistry.register('newFeed', function(){
+	    $scope.newFeed();
+	});
 	
-	lvRegistry.register('loggedIn',function(){
-		var user = security.getCurrentUser();
-		if (!user) {
+	lvRegistry.register('loggedIn',function(rec_user){
+		if (!rec_user) {
+			rec_user = security.getCurrentUser();
+		}
+		if (!$scope.user) {
 			$scope.show = true;
-			$scope.allUnread = user.allUnread;
-			$scope.userFeeds = user.feeds;
+			$scope.allUnread = rec_user.allUnread;
+			$scope.userFeeds = rec_user.feeds;
+			$scope.user = rec_user.user;
 		}
 	});
 	lvRegistry.register('loggedOut',function(){
@@ -34,24 +41,34 @@ function($scope,security,lvRegistry,L,openModal,T,Restangular){
 		    $scope.userFeeds = currentUser.feeds;
 		    $scope.allUnread = currentUser.allUnread;
 		    $scope.show = true;
-		    user = currentUser;
+		    $scope.user = currentUser.user;
 	    }
-    };
+    }
     
 	var templates = {
 	    main : T('user.feed.modal'), 
-	};
+	}
 	
 	var lexicon = {
 	    headerTextShow : L('feed.form.showfeed'),
 	    headerTextEdit : L('feed.form.editfeed'),
 	    headerTextRemove : L('feed.form.removeFeed'),
 	    headerTextNew : L('feed.form.addnewfeed')
-    };
+    }
 
     $scope.newFeed = function() {
 		openModal(false,'new',API,templates,lexicon);
-	};
+	}
+	
+	$scope.removeUserFeed = function(index) {
+		user = security.getCurrentUser();
+		if (user && user.feeds) {
+			openModal(user.feeds[index].id,'remove',API,templates,lexicon, function(done){
+				$scope.userFeeds[index].removed = true;
+			});
+			lvRegistry.set('removeUserFeed',index);
+		}
+	}
 	
 	
 }])
@@ -70,8 +87,8 @@ function($scope,security,lvRegistry,L,openModal,T,Restangular){
 	        		var that = this;
 		        	
 	        	}
-        	};
+        	}
         }
-    };
+    }
 
-}]);
+}])

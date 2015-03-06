@@ -13,11 +13,11 @@ class UpdateArticlesTable extends Migration {
 	{
 		Schema::table('articles', function($table)
 		    {
-		        $table->string('desc', 1000)->nullable();
-		        $table->string('permalink', 1000)->nullable();
-		        $table->string('author', 1000)->nullable();
-		        $table->string('category', 500)->nullable();
-		        $table->string('author_email', 100)->nullable();
+		        $table->string('desc')->nullable();
+		        $table->string('permalink')->nullable();
+		        $table->string('author')->nullable();
+		        $table->string('category')->nullable();
+		        $table->string('author_email')->nullable();
 		    });
 	}
 

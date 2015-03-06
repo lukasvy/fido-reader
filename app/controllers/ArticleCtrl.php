@@ -24,27 +24,15 @@ class ArticleCtrl extends \BaseController {
 			if ($article) {
 				$url = $article->url;
 				if (!preg_match('!^https?://!i', $url)) $url = 'http://'.$url;
-				$content = Cache::get($url);
-				if (!$content) {
-					try {
-						$html = file_get_contents($url);
-						$r = new Readability($html, $url);
-						$r->init();
-						$content = $r->articleContent->innerHTML;
-
-					} catch (Exception $e) {
-						Log::info('Exception with readability '.$e."\n url".$url);
-					}
-					if ($content) {
-						Cache::add($url, $content, 200);
-					}
-				}
-				//$content = $r->articleContent->innerHTML;
-				if (!$content || $content == '<p>Sorry, Readability was unable to parse this page for content.</p>') {
-					$content = $article->desc.'<br> ...';
-				}
+				
+				$content = Article::retrieve_article($url,$article);
+				
 				if (Auth::check()) {
-                    $user = Auth::user();
+                		    $user = Auth::user();
+				    if (Cache::has('userinfo'.$user->id)) {
+                                        Cache::forget('userinfo'.$user->id);
+                                    }
+
 				    $user_article = User_article::whereActive(true)
 						    ->whereArticle_id($article->id)
 						    ->whereUser_id($user->id)
@@ -82,7 +70,7 @@ class ArticleCtrl extends \BaseController {
 		                    }
 	                    }
 				    }
-				    
+    
 				}
 				return $content;
 			}
@@ -120,6 +108,10 @@ class ArticleCtrl extends \BaseController {
 						$user_article->article_id = $article->id;
 						$user_article->save();
 						$response_array['user_id'] = $user->id;
+						if (Cache::has('unserinfo'.$user->id)) {
+						    Cache::forget('unserinfo'.$user->id);
+						}
+
 					}
 				}
 				$response = new LvResponse($response_array);
@@ -130,7 +122,11 @@ class ArticleCtrl extends \BaseController {
 	}
 	
 	public function popular () {
-		$articles = Article::get_popular();
+		$request = new LvRequest();
+		$page = $request->get('page');
+		$offset = $request->get('offset');
+		$search_id = $request->get('search_id');
+		$articles = Article::get_popular($offset,$search_id,$page);
 		if (!$articles) {
 			$articles = array();
 		}

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class UserArticlesTable extends Migration {
+class UserArticles extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,10 +13,10 @@ class UserArticlesTable extends Migration {
 	public function up()
 	{
 		Schema::create('user_articles', function(Blueprint $table) {
-			$table->increments('id')->index();
+			$table->increments('id');
 			$table->timestamps();
-			$table->integer('user_id')->unsigned()->index();
-			$table->integer('article_id')->unsigned()->index();
+			$table->integer('user_id')->unsigned();
+			$table->integer('article_id')->unsigned();
 			$table->boolean('active')->default('true');
 			$table->foreign('article_id')->references('id')->on('articles')
 						->onDelete('restrict')

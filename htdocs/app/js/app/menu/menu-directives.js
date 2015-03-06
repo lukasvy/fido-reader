@@ -1,26 +1,50 @@
 angular.module('menu-app')
 
-.directive('lvFixed', function($window){
-	return {
-		scope : false,
+.directive('lvSelection',function(lvRegistry,security,T){
+    var snapper = false;
+    var drawer_opened = false;
+    var side = false;
+    return {
+        scope : false,
         replace : false,
         restrict : 'AE',
+        transclude : true,
+        templateUrl : T('common.selection'),
         compile : function(tElement, tAttrs, transclude){
         	return {
 	        	pre : function(scope, iElement, attr, ctrl){
-	        		var windowEl = angular.element($window);
-	        		console.log(windowEl);
-					windowEl.$on('scroll', function() {
-				      scope.$apply(function() {
-				        element.css('top',0);
-				      });
-				    });
+		        		scope.selectorText = false;
+		        		lvRegistry.register('selectorChange',function(selector){
+		        		var user = security.getCurrentUser();
+		        		if (user && selector) {
+		        			if (selector.id) {
+			        			var feeds = user.feeds;
+			        			scope.noMenu = true;
+			        			$.each(feeds,function(index,obj){
+				        			if (obj.id == selector.id){
+					        			scope.selectorText = obj.name;
+					        			scope.noMenu = true;
+					        			scope.removeUserFeed = function(){
+						        			lvRegistry.set('removeUserFeed',selector.id);
+					        			}
+				        			}
+			        			})
+		        			} else if (selector.text) {
+			        			scope.selectorText = selector.text;
+			        			scope.noMenu = true;
+		        			}
+		        		} else {
+			        		scope.selectorText = false;
+		        		}
+		    		});
 	        	}
         	}
-        },
-
-	}
-		
+        }
+        ,
+        controller : function($scope,L){
+        	
+        }
+    }
 })
 
 .directive('lvSnapper',function(lvRegistry){
@@ -52,14 +76,14 @@ angular.module('menu-app')
         		$scope.menutext = L('menu.text');
         		lvRegistry.register('userRefresh', function(rec_user){
 	        		if (!user) {
-	        			user = rec_user;
+	        			user = rec_user.user;
 	        			$scope.logintext = user.username;
 	        		}
         		});
         		lvRegistry.register('loggedIn', function(rec_user){
 	        		that.closeSnapper();
 	        		if (!user) {
-	        			user = rec_user;
+	        			user = rec_user.user;
 	        			$scope.logintext = user.username;
 	        		}
         		});
@@ -88,7 +112,9 @@ angular.module('menu-app')
                 if (snapper){
                     if (pass_side === 'left') {
                         snapper.open(pass_side);
+			$scope.leftSide = true;
                     } else {
+			$scope.leftSide = false;
                         snapper.open('right');
                     }
                 }
@@ -178,7 +204,7 @@ angular.module('menu-app')
                     if (!attr.side) { attr.side = 'left' };
                     iElement.addClass('pointer');
                     iElement.bind('click', function(e){ 
-                        ctrl.toggle(attr.side); 
+                        ctrl.toggle(attr.side);
                     });
                 }
             }

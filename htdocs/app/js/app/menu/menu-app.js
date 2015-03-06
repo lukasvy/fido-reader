@@ -1,4 +1,4 @@
-angular.module('menu-app', ['common.search','menu.login','common.registry','L'])
+angular.module('menu-app', ['common.search','menu.login','common.registry','L','ui.bootstrap.dropdownToggle'])
 
 .constant('snapSettings',{
     element: null,

@@ -58,6 +58,10 @@ $first_name = Input::get('first_name');
 				Tag::save_tag($tag);
 			}
 		}
+		if (Cache::has('tickinfo')) {
+                    Cache::forget('tickinfo');
+                }
+
 		return 1;	
 	}
 	
@@ -80,6 +84,10 @@ $first_name = Input::get('first_name');
 				$tag->save();
 			}
 		}
+	    if (Cache::has('tickinfo')) {
+                    Cache::forget('tickinfo');
+                }
+
 	}
 	
 	public function missingMethod($parameters)

@@ -8,12 +8,12 @@ class CreateArticlesTable extends Migration {
 	public function up()
 	{
 		Schema::create('articles', function(Blueprint $table) {
-			$table->increments('id')->index();
+			$table->increments('id');
 			$table->timestamps();
 			$table->boolean('active')->default('true');
-			$table->integer('feed_id')->unsigned()->index();
+			$table->integer('feed_id')->unsigned();
 			$table->string('url');
-			$table->string('title')->index();
+			$table->string('title');
 		});
 	}
 

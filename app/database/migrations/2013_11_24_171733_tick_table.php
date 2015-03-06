@@ -8,7 +8,7 @@ class TickTable extends Migration {
 	public function up()
 	{
 		Schema::create('tick', function(Blueprint $table) {
-			$table->increments('id')->index();
+			$table->increments('id');
 			$table->timestamps();
 			$table->boolean('active')->default('true');
 			$table->integer('articles_retrieved')->unsigned();

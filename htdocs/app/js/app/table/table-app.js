@@ -12,7 +12,6 @@ angular.module('table-app',['common.lvHttp','L','T'])
 		compile : function(tElement, tAttrs, transclude){
 			return {
 				pre : function(scope, iElement, attr, ctrl){
-					console.log(iElement,attr);
 				}
 			}
 		},

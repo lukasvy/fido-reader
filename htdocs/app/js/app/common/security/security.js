@@ -14,23 +14,27 @@ function($location, lvHttp,lvRegistry,$timeout){
 	    var request = lvHttp('checkuser',{id : currentUser.id});
 		    request.then(function(response) {
 			    if (response.data.user) {
-		        	currentUser = response.data.user;
+		        	currentUser = response.data;
 		        	currentUser.feeds = response.data.feeds;
 		        	currentUser.allUnread = response.data.allUnread;
 		        	lvRegistry.set('userRefresh',currentUser);
 		        } else {
-			    //service.logOut("/");
+			    service.logOut("/user/articles/popular");
 			}
+		    })
+		    .catch(function(){
+			service.logOut("/user/articles/popular");
+			return false;
 		    });
 		}
-    };
+    }
 
     var again = function(){
         $timeout(function(){
                 API.refreshUser();
                 again();
         },10000);
-        };
+        }
     again();
 
     
@@ -38,18 +42,19 @@ function($location, lvHttp,lvRegistry,$timeout){
 	    var request = lvHttp('checkuser',{});
 		    request.then(function(response) {
 			    if (response.data.user) {
-		        	currentUser = response.data.user;
+		        	currentUser = response.data;
 		        	currentUser.feeds = response.data.feeds;
 		        	lvRegistry.set('userRefresh',currentUser);
 		        	return true;
 		        } else {
-			    //service.logOut("/");
+			    service.logOut("/user/articles/popular");
 			}
 		    }).catch(function(){
+			    service.logOut("/user/articles/popular");
 			    return false;
 		    });
 		    return false;
-    };
+    }
 	var service = {
 		getCurrentUser : function() {
 			if (currentUser) {
@@ -79,17 +84,18 @@ function($location, lvHttp,lvRegistry,$timeout){
 			}
 		},
 		
-		logIn : function (username, password, callback) {
-			var request = lvHttp('login', {username : username, password : password});
+		logIn : function (username,password, callback) {
+			var request = lvHttp('login',{username : username, password : password});
 			return request.then(function(response) {
-				if (response.data.user) {
-		        	currentUser = response.data.user;
+				if (response.data && response.data.user) {
+		        	currentUser = response.data;
 		        	currentUser.feeds = response.data.feeds;
 		        	currentUser.allUnread = response.data.allUnread;
-		        	lvRegistry.set('loggedIn',currentUser);
+		        	lvRegistry.set('loggedIn',response.data);
 		        	if (callback) {
 		        		callback(true);
-		        	}	 
+		        	}
+				$location.path( "/user/articles/unread" );	 
 		        } else {
 		        	lvRegistry.set('loggedOut',false);
 			        currentUser = null;
@@ -101,7 +107,7 @@ function($location, lvHttp,lvRegistry,$timeout){
 		},
 		
 		isAdmin : function () {
-			if (currentUser && currentUser.role && currentUser.role === 'admin') {
+			if (currentUser && currentUser.user && currentUser.user.role === 'admin') {
 				return true;
 			} else {
 				return false;
@@ -123,4 +129,4 @@ function($location, lvHttp,lvRegistry,$timeout){
 		}
 	};
 	return service;
-}]);
+}])

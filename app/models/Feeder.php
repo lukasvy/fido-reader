@@ -36,7 +36,7 @@ Class Feeder {
 			return $text;
 		}
 		$html = file_get_contents($url);
-		$readability = new Readability($html, $url);
+		$readability = new Readability2($html, $url);
 		$readability->convertLinksToFootnotes = false;
 		$result = $readability->init();
 		$text = $readability->getTitle()->textContent;
@@ -74,6 +74,15 @@ Class Feeder {
 			$item->get_link() ?
 				$feedpart["link"] = $item->get_link() : 
 				$feedpart["link"] = "unknown";
+			$item->get_enclosure()->get_thumbnail() ?
+                                $feedpart["thumbnail"] = $item->get_enclosure()->get_thumbnail() :
+                                $feedpart["thumbnail"] = "";
+			$item->get_enclosure()->get_medium() ?
+                                $feedpart["media"] = $item->get_enclosure()->get_medium( ) :
+                                $feedpart["media"] = "";
+			$item->get_enclosure()->get_keywords() ?
+                                $feedpart["keywords"] = $item->get_enclosure()->get_keywords( ) :
+                                $feedpart["keywords"] = array();
 			$item->get_author() ?
 				$item->get_author()->get_name() ? 
 				$feedpart["author"] = $item->get_author()->get_name() :

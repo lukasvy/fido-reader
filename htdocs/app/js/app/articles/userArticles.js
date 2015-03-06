@@ -13,6 +13,12 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 	if ($route.current.params.page) {
 		offset = $route.current.params.page;
 	}
+	lvRegistry.set('selectorChange',{text:L('All Unread')});
+	lvRegistry.register('infiniteScroll',function(scroll){
+	   if (scroll){
+	   		$scope.showMore();
+	   } 
+    });
 	$scope.L = L;
 	$scope.loadingText = L('loading');
 	$scope.loading = false;
@@ -59,20 +65,25 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 	}
 }])
 
-.controller('UserArticlesCtrl',['$scope','returndata','lvHttp','$route','L','articlemodal','T',
-function($scope,returndata,lvHttp,$route,L,openModal,T){
+.controller('UserArticlesCtrl',['$scope','returndata','lvHttp','$route','L','articlemodal','T','lvRegistry','$location',
+function($scope,returndata,lvHttp,$route,L,openModal,T,lvRegistry,$location){
 	var offset = 10;
 	var page = 0;
 	var total = 0;
 	var shown = 0;
 	var search_id = 0;
-	console.log($route);
 	if ($route.current.params.offset) {
 		offset = $route.current.params.offset;
 	}
 	if ($route.current.params.page) {
 		offset = $route.current.params.page;
 	}
+	lvRegistry.set('selectorChange',{text:L('Unread Articles')});
+    lvRegistry.register('infiniteScroll',function(scroll){
+	   if (scroll){
+	   		$scope.showMore();
+	   } 
+    });
 	$scope.L = L;
 	$scope.loadingText = L('loading');
 	$scope.loading = false;
@@ -83,6 +94,9 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 	    openModal(id,$scope.data[index]);
 	}		
 	$scope.showMore = function(){
+		if ($scope.loading){
+		    return 1;
+		}
 		$scope.loading = true;
 		page++;
 		var feed = lvHttp('/user/articles/unread',{page:page,offset:offset,search_id:search_id});
@@ -90,7 +104,7 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 			var articles = data.data.articles;
 			total = data.data.total;
 			search_id = returndata.data.search_id;
-			if (articles.length) {
+			if (articles && articles.length) {
 				var leng = articles.length;
 				for(var i = 0; i < leng; i++){
 					$scope.data.push(articles[i]);
@@ -116,5 +130,8 @@ function($scope,returndata,lvHttp,$route,L,openModal,T){
 		if (shown >= total) {
 			$scope.noMoreData = true;
 		}
+	} else {
+		$location.path( "/user/articles/popular" );
+		$scope.noMoreData = true;
 	}
 }])

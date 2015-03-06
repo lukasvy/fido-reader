@@ -7,7 +7,6 @@ angular.module('container-app',['T','common.registry'])
     $scope.replaceData = function(data) {
         $scope.show.articles = true;
     }
-    console.log($routeParams);
 })
 
 

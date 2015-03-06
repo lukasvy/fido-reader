@@ -42,6 +42,12 @@ class Tick extends Command {
 	 */
 	public function fire()
 	{
+		try {
+		if (Cache::has('tickrunning') ) {
+                    echo 'Tick is running exiting!';
+		    return 1;
+                }
+		Cache::put('tickrunning', 'value', 20);
 		$do_not_cache = true;
 		// Measure time passed between ticks
 		$start_time = microtime(true);
@@ -49,20 +55,27 @@ class Tick extends Command {
 		$feed_count = 0;
 		$tags_matched = 0;
 		$tags_created = 0;
+		$fetch_articles = true;
 		$created_tag_ids = array();
 		$matched_tag_ids = array();
 		
  		$feeds = Feed::whereActive(true)->get();
 		foreach ($feeds as $feed) {
-			$latest_article = Article::whereFeed_id($feed->id)->first();
+			$latest_article = Article::whereFeed_id($feed->id)->orderBy('created_at','desc')->first();
 			if ($latest_article) {
 				// finish check for articles with average time
 			}
-			$stories = Feeder::getFeed($feed->url);
+			$stories = false;
+			try {
+			    $stories = Feeder::getFeed($feed->url);
+			} catch (Exception $e) {
+			    print 'Cannot get stories for '.$feed->url;
+			}
 			if ($stories) {
 				foreach ($stories as $story) {
 					// update feed if necessary
-					if ($feed->name == '' || true) {
+					//var_dump($story['thumbnail'],$story['media'],$story['keywords']);
+					if ($feed->name == '') {
 						$feed_name = false;
 						$feed_name = html_entity_decode(substr(strip_tags($story['feed_name']),0,999));
 						if ($feed_name) {
@@ -93,6 +106,7 @@ class Tick extends Command {
 						}
 					}
 					// Check if article already exists
+					$link = $story['permalink'];
 					if ($story['link'] || $story['permalink']) {
 						if ($story['link'] !== $story['permalink']) {
 							if ($story['link']) {
@@ -106,27 +120,57 @@ class Tick extends Command {
 								$link = $story['permalink'];
 							}
 						}
-						if (!Cache::has($link) || $do_not_cache) {
-							if (!Article::whereUrl($link)->get()->toArray()) {
+						if (!Cache::has($link.'tick') || $do_not_cache) {
+							if (!Article::whereUrl($link)->first()) {
 								// save only if article that does not exists
-								$title = Encoding::fixUTF8(html_entity_decode(strip_tags($story['title'])));
-								$author = Encoding::fixUTF8(strip_tags($story['author']));
-								$desc = Encoding::fixUTF8(html_entity_decode(strip_tags($story['desc'])));
-								$author = Encoding::fixUTF8(html_entity_decode(strip_tags($story['author'])));
-								$article_date =  Encoding::fixUTF8($story['date']);
-								$category = Encoding::fixUTF8(html_entity_decode(strip_tags($story['category'])));
-								$permalink = $story['permalink'];
-								//var_dump($story);
+								$title = Encoding::toUTF8(html_entity_decode(strip_tags($story['title'])));
+								$desc = Encoding::toUTF8(strip_tags(html_entity_decode($story['desc'])));
+								$author = Encoding::toUTF8(html_entity_decode(strip_tags($story['author'])));
+								$article_date =  Encoding::toUTF8($story['date']);
+								$category = Encoding::toUTF8(html_entity_decode(strip_tags($story['category'])));
+								$permalink = Encoding::toUTF8($story['permalink']);
+								$link = Encoding::toUTF8($link);
+								
+								$desc = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $desc);
+								
 								$article = new Article();
 								$article->feed_id = $feed->id;
 								$article->url = $link;
 								$article->permalink = $permalink;
 								$article->title = substr($title,0,254);
+								
 								$article->desc = substr($desc,0,999);
 								$article->category = substr($category,0,499);
 								$article->author = substr($author,0,999);
+								// testing > retrieve img from article
+								$matched_media = false;
+								if ($fetch_articles) {
+								    $content = Article::retrieve_article($article->url);
+								    if ($content && $content != '') {
+									preg_match('/<img.*?src="(.*?)".*?>/',$content,$matched_media);
+									if ($matched_media) {
+									    var_dump($matched_media[1]);
+									    $matched_media = Encoding::toUTF8($matched_media[1]);
+									}
+								    }
+								}
+								$article->media = $matched_media ? $matched_media : $story['media'];
 								$article->article_date = substr($article_date,0,999);
-								$article->save();
+								try {
+									// Problem with saving non utf8 characters to the database even if they have been converted
+									$article->save();
+								} catch (Exception $e) {
+									Cache::put($link.'tick',$desc,10);
+									print 'Cannot save article > '.$title.' '.$desc.' '.$link;
+									$article->desc = '';
+									try {
+										$article->save();
+									} catch (Exception $e) {
+										print "\nStill cannot save continuing";
+										continue;
+									}
+								}
+								
 								// get tags
 								$category = strtolower(preg_replace ('/[^\-a-zA-Z0-9_,;\s]/','',$category));
 								$category = preg_replace ('/-_;\s/',',',$category);
@@ -196,7 +240,7 @@ class Tick extends Command {
 								
 								$articles_count++;
 								if (!$do_not_cache) {
-									Cache::put($link,microtime(true),20000);
+									Cache::add($link.'tick',microtime(true),200000);
 								}
 							}
 						}
@@ -207,15 +251,23 @@ class Tick extends Command {
 			$feed_count++;
 		}
 		
+		} catch (Exception $e) {
+		    print $e;
+		}
 		$total_time = number_format((microtime(true)) - $start_time, 4);
-		
-		$tick = new TickDb();
-		$tick->articles_retrieved = $articles_count;
-		$tick->feeds_checked = $feed_count;
-		$tick->duration = $total_time;
-		$tick->tags_created = count($created_tag_ids);
-		$tick->tags_matched = count($matched_tag_ids);
-		$tick->save();
+
+                $tick = new TickDb();
+                $tick->articles_retrieved = $articles_count;
+                $tick->feeds_checked = $feed_count;
+                $tick->duration = $total_time;
+                $tick->tags_created = count($created_tag_ids);
+                $tick->tags_matched = count($matched_tag_ids);
+                $tick->save();
+
+		if (Cache::has('tickinfo')) {
+		    Cache::forget('tickinfo');
+		}
+		Cache::forget('tickrunning');
 	}
 
 }

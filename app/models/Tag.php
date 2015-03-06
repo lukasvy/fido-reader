@@ -9,16 +9,11 @@ class Tag extends Eloquent {
         'tag'  => 'Required|alpha_dash'
     );
 
-    public function feeds (){
-    	return $this->belongsToMany('Feed','feed_tags');
-    }
-
     public static function validate ($input) 
     {
 	    $rules = self::$rules;
 	    return Validator::make($input, $rules);
     }
-
     
     public static function save_tag ($tag = NULL) {
 	    if (!$tag) return false;

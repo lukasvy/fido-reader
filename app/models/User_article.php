@@ -6,4 +6,5 @@ class User_article extends Eloquent {
 	public $timestamps = true;
 
 	
+	
 }

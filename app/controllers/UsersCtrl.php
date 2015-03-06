@@ -61,16 +61,22 @@ class UsersCtrl extends \BaseController {
 		if ($id !=1) {
 			User::save_user($first_name,$last_name,$id,$role,$email,$password,$username);
 		}
-		
+		if (Cache::has('unserinfo'.$id)) {
+		    Cache::forget('unserinfo'.$id);
+		}
+
 		return 1;	
 	}
 	
 	public function unread() 
 	{
-		$request = new LvRequest();
-		$page = $request->get('page');
-		$offset = $request->get('offset');
+		$request   = new LvRequest();
+		$page      = $request->get('page');
+		$offset    = $request->get('offset');
 		$search_id = $request->get('search_id');
+		if (($page && $page == 0) || !$page) {
+		    //$offset = 20;
+		}
 		$user = Auth::user();
 		if ($user) {
 		    $user_articles = User::get_unread_articles($user->id,$offset,$page,$search_id);
@@ -99,6 +105,11 @@ class UsersCtrl extends \BaseController {
 				$user->active = true;
 				$user->save();
 			}
+			if (Cache::has('userinfo'.$user->id)) {
+			    Cache::forget('userinfo'.$user->id);
+			    Cache::forget('tickinfo');
+			}
+
 		}
 	}
 	

@@ -13,15 +13,21 @@ angular.module('search-app',['T','L','common.lvHttp','common.modal'])
 		if ($route.current.params.page) {
 			offset = $route.current.params.page;
 		}
+		$scope.$on('infiniteScroll', function(){
+        	    $scope.showMore();
+    		});
+
 		$scope.L = L;
 		$scope.loadingText = L('loading');
 		$scope.loading = false;
-		
 		$scope.showArticle = function (id,index) {
 	    	openModal(id,$scope.data[index]);
 	    }		
 	    
 		$scope.showMore = function(){
+			if ($scope.loading) {
+			    return 1;
+			}
 			$scope.loading = true;
 			var search = lvHttp('search',{query:query,page:++page,offset:offset});
 			search.then(function(data){
@@ -49,7 +55,6 @@ angular.module('search-app',['T','L','common.lvHttp','common.modal'])
 		
 		if (returndata){
 			$scope.data = returndata.data.articles;
-			console.log(returndata);
 			shown = $scope.data.length;
 			total = returndata.data.total;
 			$scope.error = false;
