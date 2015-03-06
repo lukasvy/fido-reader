@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AccessLog extends Migration {
+class AccessLogMig extends Migration {
 
 	/**
 	 * Run the migrations.
