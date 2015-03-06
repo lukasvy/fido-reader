@@ -16,8 +16,8 @@
     
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 
-    <script src="http://ivaynberg.github.com/select2/select2-3.2/select2.js"></script>
-    <link href="http://ivaynberg.github.com/select2/select2-3.2/select2.css" rel="stylesheet" type="text/css"/>
+    <script src="app/js/vendors/select2/select2.min.js"></script>
+    <link href="app/js/vendors/select2/select2.min.css" rel="stylesheet" type="text/css"/>
     
     <link rel="stylesheet" href="app/css/desktop-app-new.css">
 </head>
