@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AccessLogTable extends Migration {
+class AccessLog extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -15,9 +15,9 @@ class AccessLogTable extends Migration {
 		 Schema::create('access_log', function(Blueprint $table) {
                         $table->increments('id');
                         $table->timestamps();
-                        $table->integer('user_id')->unsigned()->index();
+                        $table->integer('user_id')->unsigned();
                         $table->integer('type')->unsigned();
-			$table->string('ip')->unsigned()->index();
+			$table->string('ip')->unsigned();
                         $table->boolean('active')->default('true');
                 });
 

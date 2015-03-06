@@ -1,6 +1,6 @@
-<div>
+<div class="">
 <form class="form.horizontal" ng-show="notloggedin">
-    <div class="control-group">
+    <div class="control-group menu-snap-top">
         <div class="controls">
             <input type="text" name="username" placeholder="{{L('login.username')}}" class="form-control" ng-model="username">
         </div>
@@ -19,6 +19,7 @@
 <ul ng-hide="notloggedin">
 	<li ng-show="isadmin"><a ng-href="#/admin">Admin</a></li>
 	<li><a ng-href="#/myaccount">{{L('myaccount')}}</a></li>
-	<li><a href="" ng-click="logout()">{{L('login.logout')}}</a></li>
+	<li><a href="" ng-click="logout()">{{L('login.logout')}}</a><lv-loading cog=1 ng-show="loading"></lv-loading></li>
+	<i class="fa fa-book footer"></i>
 </ul>
 <div>

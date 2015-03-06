@@ -1,0 +1,3 @@
+#! /bin/bash
+
+exec /usr/bin/php-cgi -c /var/www/lukas.avteam.hu/etc/php.ini

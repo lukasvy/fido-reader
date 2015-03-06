@@ -9,43 +9,40 @@ class Feed extends Eloquent {
 	protected $guarded = array('id', 'active', 'created_at', 'upadted_at');
 	
 	private static $rules = array(
-        'url'  => 'Required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'url'  => 'Required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-?]*)*\/?$/',
     );
 	
-	public static function validate($input='') {
+	public static function validate($input='')
+	{
 		$rules = self::$rules;
 		return Validator::make($input, $rules);
-	}
-
-	/**
-	 * Get the tags for feed
-	 * @return BelongsToMany
-	 */
-	public function tags () {
-		return $this->belongsToMany('Tag','feed_tags');
-	}
-
-	public function articles () {
-		return $this->hasMany('Article','feed_id')->whereActive(true);
-	}
-
-	public function users () {
-		return $this->belongsToMany('User','user_feeds','feed_id','user_id');
 	}
 	
 	public static function get_user_feeds($user) {
 		if ($user) {
+		$feeds = DB::select("
+                                    SELECT f.id,f.url,f.name,
+    (SELECT count(a.id) FROM articles a WHERE a.id NOT IN
+           (SELECT ua.article_id FROM user_articles ua WHERE ua.active AND ua.user_id = uf.user_id)
+           AND a.feed_id = f.id AND a.created_at::date >= (SELECT created_at from user_feeds WHERE active AND user_id = uf.user_id AND feed_id = f.id AND uf.active)::date
+    ) as unread
+FROM feeds f, user_feeds uf
+WHERE uf.user_id = uf.user_id AND uf.active AND uf.feed_id = f.id AND uf.user_id = ? AND f.active ORDER BY uf.created_at DESC
+                                        ",array($user->id));
+					$feeds = json_decode(json_encode((array) $feeds), true);
+                                        return $feeds;
+
 			$feeds = User_feed::whereUser_id($user->id)
 					 ->get()
 					 ->toArray();
 			if ($feeds) {
 				$feeds_ids = Arrays::pluck($feeds,'feed_id');
 				if ($feeds_ids) {
-					$feeds = self::whereActive(true)
-							 ->whereIn('id', $feeds_ids)
+					/*$feeds = self::whereActive(true)
+							 ->whereIn('id',$feeds_ids)
 							 ->select('id','url','name')
 							 ->get()
-							 ->toArray();
+							 ->toArray();*/
 					if ($feeds){
 						// find read and unread articles
 						$unread = 0;
@@ -83,8 +80,9 @@ class Feed extends Eloquent {
 		if ($feed) {
 			$articles = Article::whereActive(true)
 						->select( 
-							array('id','created_at','feed_id','author','url','title','desc') 
+							array('id','created_at','feed_id','author','url','title','desc','media') 
 						)
+						->distinct()
 						->whereFeed_id($feed->id)
 						->orderBy('created_at', 'desc');
 			$total = $articles->get()->count();
@@ -130,7 +128,7 @@ class Feed extends Eloquent {
 				return array('articles'=> $articles, 'total' => $total);
 			}
 		}
-		return 0;
+		return array('articles'=> array(), 'total' => 0);
 	}
 	
 	public static function get_feeds ($id=NULL,$offset=NULL,$skip=NULL,$sort=NULL,$filter=NULL)

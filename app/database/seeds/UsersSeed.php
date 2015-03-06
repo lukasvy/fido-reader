@@ -6,8 +6,8 @@ extends DatabaseSeeder
     {
         $users = [
             [
-                "username" => "admin",
-                "password" => Hash::make("test"),
+                "username" => "lukas",
+                "password" => Hash::make("oberon"),
                 "email"    => "lukas.vyslocky@gmail.com",
                 "role"	   => "admin",
                 "active"   => "true",

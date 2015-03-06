@@ -2,9 +2,9 @@ angular.module('common.lvHttp',[])
 
 .provider('lvHttp', [function(){
 	this.$get = function($http) {
-		return function(url, query, method) {
+		return function(url,query, method) {
 			if (!method) {
-				method = 'POST';
+				method = 'POST'
 			}
 			if (!query) {
 				query = {};
@@ -15,10 +15,9 @@ angular.module('common.lvHttp',[])
 				} else {
 					myQuery = query;
 				}
-				return $http({method:method, url:url, data : myQuery});
+				return $http({method:method, url:url, data : myQuery})
 			} else {
 				return false;
 			}
-		};
-};
-}]);
+		}
+}}])

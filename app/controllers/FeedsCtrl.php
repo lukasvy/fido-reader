@@ -32,6 +32,9 @@ class FeedsCtrl extends \BaseController {
 		if (!$page) {
 			$page = 0;
 		}
+		if ($page == 0) {
+		    //$offset = 20;
+		}
 		$user = false;
 		$userid = false;
 		if (Auth::check()) {
@@ -50,7 +53,7 @@ class FeedsCtrl extends \BaseController {
 	{
 		if ($id) 
 		{
-			Feed::remove($id);	
+			//Feed::remove($id);	
 		}
 	}
 	

@@ -6,6 +6,4 @@ class User_feed extends Eloquent {
 	public $timestamps = true;
 	protected $softDelete = false;
 
-	
-
 }

@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/',  array('as' => 'home',function()
 {
 	return View::make('app');
@@ -51,30 +52,102 @@ Route::group(array('before' => 'authUser'), function(){
 
 });
 
-Route::any('/checkuser', 'CheckUserCtrl@checkUser');
+Route::any('/checkuser', function(){
+	if (Auth::check()) {
+	    $user = Auth::user();
+	    $lastActive = Cache::get($user->username.$user->email);
+    	    if (!$lastActive) {
+                Auth::logout();
+                $response = new LvResponse(array('error'=>'user not logged in'));
+	        return $response->respond();
+    	    }
 
-Route::any('/test','TestCtrl@test' );
+	    $feeds = 0;
+	    if ($user){
+		Cache::put($user->username.$user->email, new DateTime(),Config::get('app.timeout'));
+		if (!Cache::has('userinfo'.$user->id) || !Cache::has('tickinfo')) {
+	    	$feeds = 0;
+	    	$user_feeds = false;
+	    	$user_feeds = Feed::get_user_feeds($user);
+	    	$allUnread = 0;
+	    	if ($user_feeds){
+		    	$feeds = $user_feeds;
+		    	foreach ($feeds as $feed) {
+			    	if ($feed['unread']) {
+				    	$allUnread += $feed['unread'];
+			    	}
+		    	}
+	    	}
+		    $res = array('user' =>
+                        array('username' => $user->username,
+                                  'email'        => $user->email,
+                                  'role'         => $user->role
 
-// Route::any('/test', function(){
-// 	$test = false;
-// 	//Kint::dump(Feed::first()->tags->lists('tag'));
-// 	//Debugbar::info(Feed::first()->tags->lists('tag'));
-// 	//Kint::dump(User::find(5)->feeds->lists('id'));
-// 	//$test = User::find(5)->feeds;
-// 	//$test = App::make('FeedRepo');
-// 	//$test = $test->getUserFeeds(User::find(5));
-// 	#var_dump($test);
-// 	//$test = Feed::find(1)->articles->lists('id','title');
-// 	//Kint::dump($test);
-// 	// $test = User::find(5);
-// 	// if ($test) {
-// 	// 	$test = $test->tags->lists('id','tag');
-// 	// }
-// 	// Kint::dump($test);
-	
-// });
+                        ),
+                        'feeds' => $feeds,
+                        'allUnread' => $allUnread
+                        );
+		Cache::put('userinfo'.$user->id,$res,10);
+		} else {
+		    $res = Cache::get('userinfo'.$user->id);
+		}
+		$response = new LvResponse($res);
+    		return $response->respond();
+	    }
+	}
+	$response = new LvResponse(array('error'=>'user not logged in'));
+	return $response->respond();
+});
 
-Route::post('/login', 'LoginCtrl@login');
+
+
+Route::any('/test', function(){
+	return Article::retrieve_article('http://artsbeat.blogs.nytimes.com/2013/12/18/how-dan-harmon-did-or-did-not-get-his-groove-back-at-community/?partner=rss&amp;emc=rss
+',null,false,false);
+	//return View::make('hello');
+	return 1;
+});
+
+Route::post('/login', function(){
+	$res = false;
+	$request = new LvRequest();
+	$credentials = array(
+            "username" => $request->get("username"),
+            "password" => $request->get("password")
+        );
+    if (Auth::attempt($credentials))
+    {
+    	$feeds = 0;
+    	$user = Auth::user();
+    	Cache::put($user->username.$user->email, new DateTime(),Config::get('app.timeout'));
+    	$user_feeds = Feed::get_user_feeds($user);
+    	if ($user_feeds){
+	    	$feeds = $user_feeds;
+    	}
+	if ($user) {
+            $access_log = new AccessLog();
+            $access_log->user_id = $user->id;
+            $access_log->type = 1; //login
+            $access_log->ip = Request::getClientIp();
+            $access_log->save();
+        }
+
+    	$res = new LvResponse(array('user' => 
+    			array('username' => Auth::user()->username,
+    				  'email'	 => Auth::user()->email,
+    				  'role'  	 => Auth::user()->role
+    				  
+    			),
+    			'feeds' => $feeds
+    			));
+    	return $res->respond();
+    }
+    // test response 
+    if (!$res){
+    	$res = new LvResponse(array('error'=>'Wrong username or password.'));
+    }
+    return $res->respond();
+});
 
 Route::get('/login', function(){
 	return Redirect::to('/');
@@ -103,6 +176,5 @@ Route::filter('authUser',function($route, $request){
 		Auth::logout();
 		return 0;
 	}
-	Cache::put($user->username.$user->email, new DateTime(),10);
-
+	Cache::put($user->username.$user->email, new DateTime(),Config::get('app.timeout'));
 });

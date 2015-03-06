@@ -8,7 +8,7 @@
 		<ul class="formlist">
 		<li ng-hide="modalOptions.show">
 			<label for="url">{{L('Url')}} :</label>
-			<input size="80" name="url" ng-model="data.url" type="url" required ng-minlength=4 ng-pattern="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" value="{{data.url}}" ng-disabled={{modalOptions.edit}}>
+			<input size="80" name="url" ng-model="data.url" type="url" required ng-minlength=4 ng-pattern="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-?]*)*\/?$/" value="{{data.url}}" ng-disabled={{modalOptions.edit}}>
 			<div class="error" ng-show="newFeed.url.$dirty && newFeed.url.$invalid">
 				<small class="error" ng-show="newFeed.url.$error.required">
 					{{L('Url is required!')}}

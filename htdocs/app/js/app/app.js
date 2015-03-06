@@ -66,7 +66,7 @@ function(templ,$routeProvider, $locationProvider){
 		})
 		.when('/search',{
 			controller : 'SearchAppCtrl',
-			templateUrl: templ.searchResult,
+			templateUrl: templ.articles,//templ.searchResult,
 			resolve :  {
 				returndata : function($route,lvHttp) {
 					var query = $route.current.params.q;
@@ -87,14 +87,16 @@ function($location,Restangular,security){
 .controller('AppCtrl', function($scope,$rootScope,$location,lvRegistry,security){
 	$scope.loadingEvent = 'loading';
 	var authNotRequired = [];
+
 	var filter = function(path) {
 		if (path === '/admin' && !security.isAdmin()) {
 			$location.path('/');
 		}
-	};
+	}
 	$rootScope.$on("$routeChangeStart", function (event, next, current) {
 		//filter(next.$$route.originalPath);
 		lvRegistry.set($scope.loadingEvent,true);
+		lvRegistry.set('selectorChange',false);
     });
     $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
     	lvRegistry.set($scope.loadingEvent,false);

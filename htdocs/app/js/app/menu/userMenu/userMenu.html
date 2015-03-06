@@ -4,7 +4,7 @@
 	<!--<button class="btn" ng-click=""><i class="icon-eye-open"></i></button>-->
 	</span>
 	<ul>
-	<li><button tooltip="{{L('Add Feed')}}" class="btn" ng-click="newFeed()"><i class="icon-plus-sign"></i></button></li>
+	<li><!--<button tooltip="{{L('Add Feed')}}" class="btn" ng-click="newFeed()"><i class="icon-plus-sign"></i></button>--></li>
 	   <li><a href="#/user/articles/popular">Popular</a></li>
        <li><a href="">Recommendations</a></li>
        <li>
@@ -12,7 +12,8 @@
        		<span class="badge badge-info">{{allUnread}}</span>
        </li>
        <li ng-repeat="part in userFeeds">
-       		<a href="#/feed?id={{part.id}}&offset=10">{{part.name}}</a>
+       		<a ng-hide="part.removed" href="" ng-click="removeUserFeed($index)" class="remove-feed-icon"><i class="icon-remove-sign "></i></a>
+       		<a href="#/feed?id={{part.id}}&offset=10">{{part.name || part.url}}</a>
        		<span class="badge badge-info">{{part.unread}}</span>
        </li>
     </ul>

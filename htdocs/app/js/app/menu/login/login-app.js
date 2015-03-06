@@ -1,12 +1,12 @@
 angular.module('menu.login',['L','common.error','common.modal','common.security','common.registry'])
 
-.controller ('LoginCtrl',['$scope','L','security','lvRegistry', function($scope, L, security, lvRegistry){
+.controller ('LoginCtrl',['$scope','L','security','lvRegistry', function($scope,L, security, lvRegistry){
     var errors = [];
     $scope.L = L;
     $scope.errors = errors;
     lvRegistry.register('userRefresh', function(){
             if(security.loggedIn()) {
-		      set_user();
+		set_user();
 	    }
     });
 
@@ -20,10 +20,11 @@ angular.module('menu.login',['L','common.error','common.modal','common.security'
     }
     $scope.notloggedin = true;
     $scope.submit = function() {
-        $scope.loading = true;
+    	$scope.loading = true;
 	    security.logIn($scope.username,$scope.password, function(logg){
 		    if (logg) {
 			set_user();
+			$scope.loading = false;
 		    } else {
 			   $scope.errors.push(L('login.invalid.upassword'));
 			   $scope.loading = false;
@@ -31,10 +32,12 @@ angular.module('menu.login',['L','common.error','common.modal','common.security'
 	    })
     };
     $scope.logout = function() {
+	    $scope.loading = true;
 	    security.logOut('/', function(){
 		    $scope.notloggedin = true;
 		    //$scope.$emit('loggedout');
 	    });
+	    $scope.loading = false;
     }
 }])
 

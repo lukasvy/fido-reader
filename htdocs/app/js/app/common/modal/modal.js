@@ -12,10 +12,39 @@ angular.module('common.modal',['ui.bootstrap.modal','T','L','restangular','ui.bo
     };
 }])
 
+.directive("lvFixed",['$window','$document','lvRegistry', function ($window,$document,lvRegistry) {
+    return function(scope, el, attrs) {
+	el_top = el.offset().top,
+        el_pos = el.offset().left;
+	el_height = el.height();
+        el.bind("scroll", function() {
+            scope.$apply(function(){
+		scope.$broadcast(el.scrollTop());
+		var scroll = el[0].scrollHeight - el.scrollTop() - (el.height()/3);
+		if (scroll <= el_height) {
+		    //scope.$broadcast('infiniteScroll',el.scrollTop());
+		    lvRegistry.set('infiniteScroll',true);
+		}
+		el.find('.navbar-fixed-top').css('top','0px');
+	    });
+        });
+    };
+}])
+
+.directive('scrollPosition', function($window) {
+  return function(scope, element, attrs) {
+    var windowEl = angular.element($window);
+    windowEl.on('scroll', function() {
+      scope.$apply(function() {
+      });
+    });
+  };
+})
+
 .factory('newModal',['$modal','Restangular','L',function(modal,Restangular,L){
-	return function(id,action,API,templates,lexicon) {
-    	var feed = {};
-    	if (id) {
+	return function(id,action,API,templates,lexicon, callback) {
+    	var feed = {}
+    	if (id && !_.isObject(id)) {
 	    	feed = Restangular.one(API.url,id).get();
 	    }
 	    feed.reload_data = API.reload_data;
@@ -63,6 +92,7 @@ angular.module('common.modal',['ui.bootstrap.modal','T','L','restangular','ui.bo
 			            		});
 			            	}
 			            } else if (action === 'remove'){
+			            	var done = false;
 			            	$scope.modalOptions.headerText = lexicon.headerTextRemove;
 			            	$scope.modalOptions.actionButtonText = L('common.modal.remove');
 			            	$scope.modalOptions.show = false;
@@ -80,11 +110,18 @@ angular.module('common.modal',['ui.bootstrap.modal','T','L','restangular','ui.bo
 			            		.then(function(){
 				            		feed.reload_data();
 				            		close();
+				            		done = true;
+				            		if (callback) {
+						            	callback(done);
+					            	}
 			            		})
 			            		.catch(function(e,d){
 				            		close();
+				            		done = false;
+				            		if (callback) {
+						            	callback(done);
+					            	}
 			            		});
-			            		
 			            	}
 			            } else if (action === 'lock'){
 			            	$scope.modalOptions.headerText = lexicon.headerTextLock;
@@ -135,6 +172,9 @@ angular.module('common.modal',['ui.bootstrap.modal','T','L','restangular','ui.bo
 			            		
 			            	}
 			            } else {
+			            	if (id && _.isObject(id)) {
+				            	$scope.data = id;
+			            	}
 			            	$scope.modalOptions.headerText = lexicon.headerTextNew;
 			            	$scope.modalOptions.show = false;
 			            	$scope.modalOptions.add = true;
@@ -214,7 +254,6 @@ angular.module('common.modal',['ui.bootstrap.modal','T','L','restangular','ui.bo
                 $scope.modalOptions.ok = function(result) {
                     $modalInstance.close(result);
                 }
-                console.log($scope);
                 $scope.modalOptions.close = function(result){
                     $modalInstance.dismiss('cancel');
                 };

@@ -15,7 +15,6 @@ class AddNameToFeeds extends Migration {
 		    {
 		        $table->string('first_name', 100)->nullable();
 		        $table->string('last_name', 100)->nullable();
-		        $table->string('remember_token', 100)->nullable();
 		    });
 	}
 

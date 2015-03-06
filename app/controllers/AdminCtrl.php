@@ -37,6 +37,10 @@ class AdminCtrl extends \BaseController {
 		$id = intval(Input::get('id'));
 		$inputTags = Input::get('tags');
 		Feed::add_edit_feed($id,$inputUrl,$inputTags);
+		if (Cache::has('tickinfo')) {
+                    Cache::forget('tickinfo');
+                }
+
 		return 1;	
 	}
 	
@@ -46,6 +50,10 @@ class AdminCtrl extends \BaseController {
 		{
 			Feed::remove($id);	
 		}
+		if (Cache::has('tickinfo')) {
+                    Cache::forget('tickinfo');
+                }
+
 	}
 	
 	public function missingMethod($parameters)

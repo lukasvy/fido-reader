@@ -95,7 +95,7 @@ function($scope, ngTableParams, Restangular,T,L,openModal) {
 	    headerTextEdit : L('feed.form.editfeed'),
 	    headerTextRemove : L('feed.form.removeFeed'),
 	    headerTextNew : L('feed.form.addnewfeed')
-    };
+    }
     
     $scope.newFeed = function() {
 		openModal(false,'new',API,templates,lexicon);

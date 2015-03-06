@@ -27,7 +27,8 @@ angular.module('T',[])
     'article'				: 'app/js/app/articles/article.html',
     'modal.articlemodal'	: 'app/js/app/common/modal/articlemodal.html',
     'articles'				: 'app/js/app/articles/articles.html',
-    'userMenu'				: 'app/js/app/menu/userMenu/userMenu.html'
+    'userMenu'				: 'app/js/app/menu/userMenu/userMenu.html',
+    'common.selection'		: 'app/js/app/menu/selection.html'
     
 })
 
