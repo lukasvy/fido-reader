@@ -1,3 +1,5 @@
 vendor/*
 .DS_Store
 app/config/dev/*
+*.sublime-project
+*.sublime-workspace
