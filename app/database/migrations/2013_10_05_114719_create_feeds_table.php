@@ -12,6 +12,7 @@ class CreateFeedsTable extends Migration {
 			$table->timestamps();
 			$table->boolean('active')->default('true');
 			$table->string('url');
+			$table->string('name')->default('');
 		});
 	}
 

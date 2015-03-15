@@ -4,7 +4,7 @@
 class AdminCtrl extends \BaseController {
 	
 	public function getIndex($id=NULL) 
-	{	
+	{
 		$offset = intval(Input::get('offset'));
 		$id = intval($id);
 		$page = intval(Input::get('page'));

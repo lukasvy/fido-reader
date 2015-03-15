@@ -14,6 +14,8 @@ class TickTable extends Migration {
 			$table->integer('articles_retrieved')->unsigned();
 			$table->integer('feeds_checked')->unsigned();
 			$table->float('duration')->unsigned();
+			$table->integer('tags_created')->unsigned();
+		    $table->integer('tags_matched')->unsigned();
 		});
 	}
 

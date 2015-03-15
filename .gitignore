@@ -3,3 +3,5 @@ vendor/*
 app/config/dev/*
 *.sublime-project
 *.sublime-workspace
+
+tests/_log/*
