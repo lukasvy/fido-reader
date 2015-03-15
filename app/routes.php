@@ -115,6 +115,7 @@ Route::post('/login', function(){
             "username" => $request->get("username"),
             "password" => $request->get("password")
         );
+
     if (Auth::attempt($credentials))
     {
     	$feeds = 0;
@@ -132,7 +133,7 @@ Route::post('/login', function(){
             $access_log->save();
         }
 
-    	$res = new LvResponse(array('user' => 
+    	$res = new LvRequestponse(array('user' => 
     			array('username' => Auth::user()->username,
     				  'email'	 => Auth::user()->email,
     				  'role'  	 => Auth::user()->role

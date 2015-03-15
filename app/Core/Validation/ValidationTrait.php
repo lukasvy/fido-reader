@@ -22,7 +22,7 @@ trait ValidationTrait {
 		}
 		$params = [];
 		foreach ($this->fillable as $key => $value) {
-			$param[] = $this[$value];
+			$params[$value] = $this[$value];
 		}
 		return $params;
 	}
@@ -34,9 +34,10 @@ trait ValidationTrait {
 		if (!$this->rules) {
 			throw new \ValidationException('Cannot find rules, please add rules for calidation into model');
 		}
+
 		$validator = \Validator::make($input, $this->rules);
 		if ($validator->fails()) {
-			$errors = $validator->messages();
+			$this->errors = $validator->messages();
 			$this->invalid = true;
 		} else {
 			$this->invalid = false;
@@ -46,7 +47,8 @@ trait ValidationTrait {
 	}
 
 	public function save (array $options = []) {
-		if ($this->validate()) {
+		$this->validate();
+		if (!$this->invalid) {
 			parent::save();
 		} else {
 			throw new ValidationException();

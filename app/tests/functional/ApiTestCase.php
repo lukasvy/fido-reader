@@ -47,9 +47,9 @@ class ApiTestCase extends \TestCase {
      * @param $uri
      * @return mixed
      */
-    protected function getJson($uri)
+    protected function getJson($uri, $method = 'GET', $params)
     {
-        return json_decode($this->call('GET', $uri)->getContent());
+        return json_decode($this->call($method, $uri,$params)->getContent());
     }
 
     /**
