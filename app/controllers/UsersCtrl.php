@@ -1,5 +1,5 @@
 <?php
-
+// Deprecated
 
 class UsersCtrl extends \BaseController {
 	

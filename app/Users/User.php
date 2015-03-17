@@ -23,6 +23,10 @@ use \app\Core\Validation\ValidationTrait;
     public function tags() {
     	//$this->belongsToMany('app\Tags\Tag');
     }
+
+    public function setPasswordAttribute($value) {
+		$this->attributes['password'] = \Hash::make($value);
+ 	}
 	
 	public static function get_user_tags ($id = NULL) {
 		if (!$id) return array();

@@ -113,6 +113,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
+		'\app\ServiceProviders\MainServiceProvider'
 		//'Way\Generators\GeneratorsServiceProvider'
 
 	),
@@ -179,7 +180,7 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'Arrays' 		  => 'Underscore\Types\Arrays',
+		'Arrays' 		  => 'Underscore\Types\Arrays'
 
 	),
 	'timeout' => 10,

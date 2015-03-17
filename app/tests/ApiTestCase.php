@@ -1,18 +1,16 @@
 <?php namespace app\tests;
 
-use Faker\Factory as Faker;
+use app\tests\Creator\FakeCreatorInterface as FakeCreatorInterface;
 
 class ApiTestCase extends \TestCase {
 
 	protected $times = 1;
-	protected $faker;
 
 	/**
 	 * Default constructor
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->faker = Faker::create();
 	}
 
 	/**
@@ -67,10 +65,13 @@ class ApiTestCase extends \TestCase {
         }
     }
 
-
-	private function create () {
+	public function create (FakeCreatorInterface $creator) {
+		$class  = $creator->getClass();
+		$params = $creator->getParams(); 
 		while ($this->times-- > 0) {
-
+			$result = call_user_func([$class,'create'],$params);
 		}
+		$this->times = 1;
+		return $this;
 	}
 }

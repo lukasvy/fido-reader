@@ -1,6 +1,7 @@
 <?php
+// DEPRECATED
 
-class AccessLog extends Eloquent {
+class AccessLog_ extends Eloquent {
 
 	protected $table = 'access_log';
 	public $timestamps = true;

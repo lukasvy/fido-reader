@@ -102,53 +102,52 @@ Route::any('/checkuser', function(){
 
 
 Route::any('/test', function(){
-	return Article::retrieve_article('http://artsbeat.blogs.nytimes.com/2013/12/18/how-dan-harmon-did-or-did-not-get-his-groove-back-at-community/?partner=rss&amp;emc=rss
-',null,false,false);
-	//return View::make('hello');
-	return 1;
+	
 });
 
-Route::post('/login', function(){
-	$res = false;
-	$request = new LvRequest();
-	$credentials = array(
-            "username" => $request->get("username"),
-            "password" => $request->get("password")
-        );
+Route::post('/login',['uses' => 'UserCtrl@logIn','as' => 'login']);
 
-    if (Auth::attempt($credentials))
-    {
-    	$feeds = 0;
-    	$user = Auth::user();
-    	Cache::put($user->username.$user->email, new DateTime(),Config::get('app.timeout'));
-    	$user_feeds = Feed::get_user_feeds($user);
-    	if ($user_feeds){
-	    	$feeds = $user_feeds;
-    	}
-	if ($user) {
-            $access_log = new AccessLog();
-            $access_log->user_id = $user->id;
-            $access_log->type = 1; //login
-            $access_log->ip = Request::getClientIp();
-            $access_log->save();
-        }
+// Route::post('/login', function(){
+// 	$res = false;
+// 	$request = new LvRequest();
+// 	$credentials = array(
+//             "username" => $request->get("username"),
+//             "password" => $request->get("password")
+//         );
 
-    	$res = new LvRequestponse(array('user' => 
-    			array('username' => Auth::user()->username,
-    				  'email'	 => Auth::user()->email,
-    				  'role'  	 => Auth::user()->role
+//     if (Auth::attempt($credentials))
+//     {
+//     	$feeds = 0;
+//     	$user = Auth::user();
+//     	Cache::put($user->username.$user->email, new DateTime(),Config::get('app.timeout'));
+//     	$user_feeds = Feed::get_user_feeds($user);
+//     	if ($user_feeds){
+// 	    	$feeds = $user_feeds;
+//     	}
+// 	if ($user) {
+//             $access_log = new AccessLog();
+//             $access_log->user_id = $user->id;
+//             $access_log->type = 1; //login
+//             $access_log->ip = Request::getClientIp();
+//             $access_log->save();
+//         }
+
+//     	$res = new LvResponse(array('user' => 
+//     			array('username' => Auth::user()->username,
+//     				  'email'	 => Auth::user()->email,
+//     				  'role'  	 => Auth::user()->role
     				  
-    			),
-    			'feeds' => $feeds
-    			));
-    	return $res->respond();
-    }
-    // test response 
-    if (!$res){
-    	$res = new LvResponse(array('error'=>'Wrong username or password.'));
-    }
-    return $res->respond();
-});
+//     			),
+//     			'feeds' => $feeds
+//     			));
+//     	return $res->respond();
+//     }
+//     // test response 
+//     if (!$res){
+//     	$res = new LvResponse(array('error'=>'Wrong username or password.'));
+//     }
+//     return $res->respond();
+// });
 
 Route::get('/login', function(){
 	return Redirect::to('/');

@@ -12,6 +12,8 @@
 	"autoload": {
 		"classmap": [
 			"app/commands",
+			"app/ServiceProviders",
+			"app/AccessLog",
 			"app/controllers",
 			"app/models",
 			"app/tests",
@@ -20,7 +22,10 @@
 			"app/tests",
 			"app/Users",
 			"app/Core"
-		]
+		],
+		"psr-0": {
+			"app//": "app/"
+		}
 	},
 	"scripts": {
 		"post-install-cmd": [

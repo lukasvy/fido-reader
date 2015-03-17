@@ -1,20 +1,31 @@
-<?php namespace app\tests;
+<?php namespace app\tests\functional;
+
+use app\tests\Creator\UserCreator as UserCreator;
+use app\tests\ApiTestCase as ApiTestCase;
 
 class LoginTest extends ApiTestCase {
-
-use Traits\CreateUserTrait;
-
-	public function setUp() {
-		parent::setUp();
-	}
 
 	/** @test **/
 	public function it_logs_in_user_with_correct_credentials (){
 		$credentials = ['password' => 'test', 'username' => 'user'];
-		$this->times(1)->createUser($credentials,true);
+		
+		$this->times(1)->create(new UserCreator($credentials));
 
 		$result = $this->getJson('/login','POST',$credentials);
-		dd($result);
-		$this->assertObjectHasAttributes($result,'ok');
+		
+		$this->assertObjectHasAttributes($result,'username','feeds','email','role');
+	}
+
+	/** @test **/
+	public function user_logs_in_with_incorrect_credentials() {
+
+		$this->setExpectedException('app\Users\Exceptions\UserNotLoggedInException');
+
+		$credentials = ['password' => 'test', 'username' => 'user'];
+		
+		$this->times(1)->create(new UserCreator);
+
+		$result = $this->getJson('/login','POST',$credentials);
+
 	}
 }
