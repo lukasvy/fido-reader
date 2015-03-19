@@ -1,13 +1,13 @@
 <?php 
 
-namespace app\Users;
+namespace Fido\Users;
 
 class UserRepo {
 
 	private $user;
 
 	public function __construct () {
-		$this->user = \App::make('\app\Users\User');
+		$this->user = \App::make('Fido\Users\User');
 	}
 
 	public function getUserWithId($id) {

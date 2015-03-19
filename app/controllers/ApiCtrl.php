@@ -1,5 +1,7 @@
 <?php
 
+// DEPRECATED
+
 class ApiCtrl extends \BaseController{
 	
 	private $request;
@@ -11,5 +13,6 @@ class ApiCtrl extends \BaseController{
 	public function respond ($data) {
 		
 	}
+
 
 }

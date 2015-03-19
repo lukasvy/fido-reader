@@ -1,8 +1,8 @@
-<?php namespace app\Users;
+<?php namespace Fido\Users;
 
 class User extends \Eloquent {
 
-use \app\Core\Validation\ValidationTrait;
+use \Fido\Core\Validation\ValidationTrait;
 
 	protected $table      = 'users';
 	public $timestamps    = true;

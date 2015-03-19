@@ -3,7 +3,7 @@
 class UserCreator extends FakeCreator {
 
 	public function getClass() {
-		return 'app\Users\User';
+		return 'Fido\Users\User';
 	}
 	/**
 	 * Returns user parameters

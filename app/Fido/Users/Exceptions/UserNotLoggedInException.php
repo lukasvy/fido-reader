@@ -1,6 +1,6 @@
 <?php 
 
-namespace app\Users\Exceptions;
+namespace Fido\Users\Exceptions;
 
 class UserNotLoggedInException extends \Exception {
 	protected $message = 'Invalid username or password';

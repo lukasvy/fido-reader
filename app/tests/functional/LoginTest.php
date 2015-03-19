@@ -19,7 +19,7 @@ class LoginTest extends ApiTestCase {
 	/** @test **/
 	public function user_logs_in_with_incorrect_credentials() {
 
-		$this->setExpectedException('app\Users\Exceptions\UserNotLoggedInException');
+		$this->setExpectedException('Fido\Users\Exceptions\UserNotLoggedInException');
 
 		$credentials = ['password' => 'test', 'username' => 'user'];
 		

@@ -1,6 +1,6 @@
-<?php namespace app\Core\Api;
+<?php namespace Fido\Core\Api;
 
-use app\Core\Response\Response as Response;
+use Fido\Core\Response\Response as Response;
 
 class ApiCtrl extends \BaseController {
 

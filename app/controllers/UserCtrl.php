@@ -1,6 +1,6 @@
 <?php
 
-use app\Core\Api\LoggedInUserApiCtrl as LoggedInUserApiCtrl;
+use Fido\Core\Api\LoggedInUserApiCtrl as LoggedInUserApiCtrl;
 
 class UserCtrl extends LoggedInUserApiCtrl {
 

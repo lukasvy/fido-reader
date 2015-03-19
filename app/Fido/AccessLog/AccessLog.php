@@ -1,6 +1,6 @@
 <?php 
 
-namespace app\AccessLog;
+namespace Fido\AccessLog;
 
 class AccessLog extends \Eloquent {
 

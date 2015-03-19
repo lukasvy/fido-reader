@@ -12,35 +12,27 @@ class MainServiceProvider extends ServiceProvider {
 	 */
     public function register() {
         $this->bindExceptions();
-        $this->bindEventListeners();
         $this->bindRepos();
         $this->registerEvents();
         $this->registerExceptionsHandlers();
     }
 
     public function bindRepos() {
-        $this->app->bind('AccessLogRepo','\app\AccessLog\AccessLogRepo');
+        $this->app->bind('AccessLogRepo','Fido\AccessLog\AccessLogRepo');
     }
 
     /**
      * Bind exceptions to App container
      */
     public function bindExceptions(){
-        $this->app->bind('UserNotLoggedInException','\app\Users\Exceptions\UserNotLoggedInException');
-    }
-
-    /**
-     * Bind event listeners to App container
-     */
-    public function bindEventListeners(){
-        $this->app->bind('UserListener','\app\Users\UserListener');
+        $this->app->bind('UserNotLoggedInException','Fido\Users\Exceptions\UserNotLoggedInException');
     }
 
     /**
      * Global Event handlers
      */
     public function registerEvents () {
-    	\Event::subscribe('UserListener');
+        \Event::listen('Fido.*','Fido\Listeners\UserListener');
     }
 
     /**
@@ -50,7 +42,7 @@ class MainServiceProvider extends ServiceProvider {
     	// Handle invalid login credentials
 		\App::error(function(\UserNotLoggedInException $exception, $code)
 		{
-			$response =  new \app\Core\Response\Response;
+			$response =  new Fido\Core\Response\Response;
 			return $response->respondWithError($exception->getMessage());
 		});
     }

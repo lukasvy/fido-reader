@@ -1,4 +1,4 @@
-<?php namespace app\Core\Validation;
+<?php namespace Fido\Core\Validation;
 
 
 trait ValidationTrait {
@@ -32,7 +32,7 @@ trait ValidationTrait {
 			$input = $this->getModelParams();
 		}
 		if (!$this->rules) {
-			throw new \ValidationException('Cannot find rules, please add rules for calidation into model');
+			throw new ValidationException('Cannot find rules, please add rules for calidation into model');
 		}
 
 		$validator = \Validator::make($input, $this->rules);
