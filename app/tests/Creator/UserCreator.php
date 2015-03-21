@@ -12,22 +12,22 @@ class UserCreator extends FakeCreator {
 	 * Class name
 	 * @return [string]
 	 */
-	public function getClass() {
+	protected function getClass() {
 		return 'Fido\Users\User';
 	}
 	/**
 	 * Returns user parameters
 	 * @return array 
 	 */
-	public function getParams() {
+	protected function getParams($faker) {
 		return [
-			'email'      => $this->faker->email,
-			'password'   => $this->faker->password,
+			'email'      => $faker->email,
+			'password'   => $faker->password,
 			'active'     => true,
-			'username'   => $this->faker->username,
+			'username'   => $faker->username,
 			'role'       => 'admin',
-			'first_name' => $this->faker->firstName,
-			'last_name'  => $this->faker->lastName
+			'first_name' => $faker->firstName,
+			'last_name'  => $faker->lastName
 		];
 	}
 

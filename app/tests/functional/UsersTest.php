@@ -2,6 +2,7 @@
 
 use app\tests\Creator\UserCreator as UserCreator;
 use app\tests\ApiTestCase as ApiTestCase;
+use Fido\Users\User as User;
 
 class UserTest extends ApiTestCase {
 
@@ -10,9 +11,9 @@ class UserTest extends ApiTestCase {
 		
 
 		$this->times(4)->create(new UserCreator());
-		$user = $this->times(1)->create(new UserCreator(['role'=>'admin']));
+		$user = $this->times(1)->create(new UserCreator(['role'=>'admin']), true);
 		
-		$this->be($user);
+		$this->be(User::find($user->id));
 
 		$result = $this->getJson('/users','GET');
 		

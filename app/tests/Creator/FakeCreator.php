@@ -16,7 +16,7 @@ abstract class FakeCreator implements FakeCreatorInterface {
 
 	// Faker instance
 	protected $faker;
-	
+
 	// used for unique 
 	private $index = 1;
 
@@ -30,8 +30,8 @@ abstract class FakeCreator implements FakeCreatorInterface {
 	 * overwrite array passed to creator + add unique params to them
 	 * @return [array]
 	 */
-	public function getModifiedParams () {
-		$model = $this->getParams();
+	private function getModifiedParams () {
+		$model = $this->getParams($this->faker);
 		$model = $this->makeUnique($model);
 		if ($this->overwrite) {
 			$model = array_merge($model,$this->overwrite);
@@ -103,7 +103,7 @@ abstract class FakeCreator implements FakeCreatorInterface {
 	 * Returns full name of class that creator should return
 	 * @return [string]
 	 */
-	abstract public function getClass();
+	abstract protected function getClass();
 
 	/**
 	 * Returns array of parameters that class needs to have
@@ -120,9 +120,10 @@ abstract class FakeCreator implements FakeCreatorInterface {
 	 * 	'last_name'  => $this->faker->lastName
 	 * ];
 	 * return $user;
-	 * 
+	 * @param [Faker] $faker faker instance will be passed to the function 
+	 * automatically
 	 * @return [array]
 	 */
-	abstract public function getParams();
+	abstract protected function getParams($faker);
 
 }
