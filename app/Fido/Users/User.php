@@ -3,13 +3,22 @@
 class User extends \Eloquent {
 
 use \Fido\Core\Validation\ValidationTrait;
+use \Fido\Core\Filtering\FilterableTrait;
+use \Fido\Core\Sorting\SortableTrait;
+use \Fido\Core\Pagination\PaginatableTrait;
 
 	protected $table      = 'users';
 	public $timestamps    = true;
 	protected $softDelete = false;
 
 	// Fillable properties on user
-	protected $fillable = array('username', 'email', 'first_name', 'last_name' , 'password', 'role');
+	protected $fillable   = array('username', 'email', 'first_name', 'last_name' , 'password', 'role');
+
+	// Define properties which can be filtered through
+	protected $filterable = array('username', 'email', 'first_name', 'last_name');
+
+	// Define sortable fields
+	protected $sortable   = array('username', 'email', 'first_name', 'last_name');
 
 	// Validation trait ruleset
 	protected $rules = array(
@@ -55,6 +64,8 @@ use \Fido\Core\Validation\ValidationTrait;
 		return \DB::select($query, array($this->id, $limit));
 	}
 	
+
+	// BELOW DEPRECATED
 	public static function save_user($first_name=NULL,$last_name=NULL,$id=NULL,$role=NULL,$email=NULL,$password=NULL,$username=NULL) {
 		$validation = array(
 				'first_name'	=> $first_name,

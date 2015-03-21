@@ -1,21 +1,19 @@
 <?php namespace app\tests\functional;
 
 use app\tests\Creator\UserCreator as UserCreator;
-use app\tests\ApiTestCase as ApiTestCase;
+use app\tests\AdminTestCase;
 use Fido\Users\User as User;
 
-class UserTest extends ApiTestCase {
+class UserTest extends AdminTestCase {
 
 	/** @test **/
-	public function only_logged_in_user_can_access () {
-		\Auth::logout();
+	public function if_checks_that_only_logged_in_user_can_access_api () {
 		$this->setExpectedException('Fido\Users\Exceptions\NotAllowedException');
 		$result = $this->getJson('admin/users','GET');
 	}
 
 	/** @test **/
-	public function check_that_correct_user_can_view_api () {
-		\Auth::logout();
+	public function it_check_that_correct_user_can_view_api () {
 		$this->setExpectedException('Fido\Core\Exceptions\NotAllowedException');
 		$user = $this->createAndReturn(new UserCreator(['role'=>'user']));
 		
@@ -24,18 +22,21 @@ class UserTest extends ApiTestCase {
 	}
 
 	/** @test **/
-	public function get_all_users_within_application (){
-		\Auth::logout();
+	public function it_fails_when_no_user_is_found (){
+		$this->setExpectedException('Illuminate\Database\Eloquent\ModelNotFoundException');
+		$this->loginAdmin();
+		$result = $this->getJson('admin/users/1','GET');
+	}
 
-		$this->times(4)->create(new UserCreator(['role'=>'user']));
+	/** @test **/
+	public function it_gets_user_within_application (){
+		$user = $this->times(50)->createAndReturn(new UserCreator());
+		// $this->loginAdmin();
+		// $result = $this->getJson('admin/users/'.$user->id,'GET');
+		$result = User::filter('as')->sort()->paginate();
+		$count = $result->count();
 
-		$user = $this->create(new UserCreator(['role'=>'admin']), true);
-		
-		\Auth::loginUsingId($user->id);
-
-		$result = $this->getJson('admin/users','GET');
-		
-		dd($result);
+		dd($count);
 	}
 
 }

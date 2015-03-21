@@ -3,6 +3,7 @@
 namespace app\ServiceProviders;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MainServiceProvider extends ServiceProvider {
 
@@ -45,6 +46,11 @@ class MainServiceProvider extends ServiceProvider {
 			$response =  new Fido\Core\Response\Response;
 			return $response->respondWithError($exception->getMessage());
 		});
+
+        \App::error(function(ModelNotFoundException $exception, $code){
+            $response =  new Fido\Core\Response\Response;
+            return $response->respondWithError('Not Found');
+        });
     }
 
 }

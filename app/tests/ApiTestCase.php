@@ -30,6 +30,16 @@ class ApiTestCase extends \TestCase {
 	}
 
 	/**
+	 * Creates admin user and logs him in
+	 * @return [type] [description]
+	 */
+	public function loginAdmin () {
+		$user = $this->create(new UserCreator(['role'=>'admin']), true);
+		\Auth::loginUsingId($user->id);
+		return $user;
+	}
+
+	/**
 	 * Specifies how many times to run the actoun
 	 * @param  Integer $n 
 	 * @return self    

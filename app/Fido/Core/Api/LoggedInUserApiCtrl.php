@@ -70,7 +70,6 @@ class LoggedInUserApiCtrl extends ApiCtrl {
 	 */
 	private function hasPermissionToView($user) {
 		$result = false;
-
 		if (sizeof($this->allowedRoles) > 0) {
 			foreach ($this->allowedRoles as $value) {
 				if ($user->role == $value) {

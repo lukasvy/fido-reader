@@ -100,12 +100,12 @@ Route::any('/checkuser', function(){
 });
 
 Route::any('/test', function(){
-	$user = Fido\Users\User::where('username','=','admin')->first();
-	var_dump($user);
+	$user = Fido\Users\User::filter("lukas",['email','username','first_name','last_name'])->get();
+	dd($user);
 });
 
 // Refactoring views
-Route::get('admin/users/{id?}', ['uses' => 'Fido\Users\UserCtrl@get', 'as' => 'getUsers']);
+Route::get('admin/users/{id?}', ['uses' => 'Fido\Users\AdminUsersCtrl@get', 'as' => 'getUsers']);
 Route::post('/login',['uses' => 'Fido\Users\UserCtrl@logIn','as' => 'login']);
 
 // Route::post('/login', function(){
