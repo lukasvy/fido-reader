@@ -13,4 +13,8 @@ class UserRepo {
 	public function getUserWithId($id) {
 		return $this->user->find($id);
 	}
+
+	public function getUserTags($user, $limit = 10) {
+		return $user->getUserTags($limit);
+	}
 }

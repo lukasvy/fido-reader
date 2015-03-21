@@ -1,6 +1,8 @@
 <?php
 
-class User extends Eloquent {
+// DEPRECATED
+
+class User_ extends Eloquent {
 
 	protected $table = 'users';
 	public $timestamps = true;

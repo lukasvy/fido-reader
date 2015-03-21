@@ -65,13 +65,17 @@ class ApiTestCase extends \TestCase {
         }
     }
 
-	public function create (FakeCreatorInterface $creator) {
-		$class  = $creator->getClass();
-		$params = $creator->getParams(); 
+	public function create (FakeCreatorInterface $creator, $getCreated = false) {;
+		// perform creation n times
 		while ($this->times-- > 0) {
-			$result = call_user_func([$class,'create'],$params);
+			$result = $creator->create();
 		}
+		// reset times counter
 		$this->times = 1;
+		// return last result if required
+		if ($getCreated) {
+			return $result;
+		}
 		return $this;
 	}
 }

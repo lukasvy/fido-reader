@@ -26,7 +26,7 @@ Route::any('user/articles/popular','ArticleCtrl@popular');
 Route::group(array('before' => 'authAdmin'), function(){
 	Route::controller('admin/feeds/{id?}', 'AdminFeedsCtrl');
 	Route::controller('admin/tags/{id?}', 'TagsCtrl');
-	Route::controller('admin/users/{id?}', 'UsersCtrl');
+	//Route::controller('admin/users/{id?}', 'UsersCtrl');
 	Route::controller('admin/statistics/{id?}', 'AdminStatisticsCtrl');
 });
 
@@ -99,13 +99,14 @@ Route::any('/checkuser', function(){
 	return $response->respond();
 });
 
-
-
 Route::any('/test', function(){
-	
+	$user = Fido\Users\User::where('username','=','admin')->first();
+	var_dump($user);
 });
 
-Route::post('/login',['uses' => 'UserCtrl@logIn','as' => 'login']);
+// Refactoring views
+Route::get('admin/users/{id?}', ['uses' => 'Fido/Users/UsersCtrl@get', 'as' => 'getUsers']);
+Route::post('/login',['uses' => 'Fido\Users\UserCtrl@logIn','as' => 'login']);
 
 // Route::post('/login', function(){
 // 	$res = false;

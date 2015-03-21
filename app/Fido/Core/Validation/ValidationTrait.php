@@ -51,7 +51,7 @@ trait ValidationTrait {
 		if (!$this->invalid) {
 			parent::save();
 		} else {
-			throw new ValidationException();
+			throw new ValidationException($this->errors);
 		}
 	}
 }

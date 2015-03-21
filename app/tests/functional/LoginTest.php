@@ -10,7 +10,7 @@ class LoginTest extends ApiTestCase {
 		$credentials = ['password' => 'test', 'username' => 'user'];
 		
 		$this->times(1)->create(new UserCreator($credentials));
-
+		
 		$result = $this->getJson('/login','POST',$credentials);
 		
 		$this->assertObjectHasAttributes($result,'username','feeds','email','role');

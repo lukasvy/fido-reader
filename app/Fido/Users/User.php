@@ -20,16 +20,29 @@ use \Fido\Core\Validation\ValidationTrait;
         'role'		 => 'in:admin,user'
     );
 
+	/**
+	 * Eloquent 
+	 * @return belongsToMany
+	 */
     public function tags() {
-    	//$this->belongsToMany('app\Tags\Tag');
+    	return $this->belongsToMany('Fido\Tags\Tag','user_tags','user_id','tag_id');
     }
 
+    /**
+     * Hash password attribute
+     * @param [type] $value [description]
+     */
     public function setPasswordAttribute($value) {
 		$this->attributes['password'] = \Hash::make($value);
  	}
 	
-	public static function get_user_tags ($id = NULL) {
-		if (!$id) return array();
+	/**
+	 * Returns all user tags
+	 * @param  integer $limit [description]
+	 * @return array
+	 */
+	public function getUserTags ($limit = 10) {
+		if (!$this->id) return array();
 		$query = "
 					SELECT t.tag, ut.footprint 
 					FROM tags t, user_tags ut
@@ -37,9 +50,9 @@ use \Fido\Core\Validation\ValidationTrait;
 					AND t.active AND ut.active
 					AND ut.user_id = ?
 					ORDER BY ut.footprint DESC
-					LIMIT 10;
+					LIMIT ?;
 				 ";
-		return \DB::select($query, array($id));
+		return \DB::select($query, array($this->id, $limit));
 	}
 	
 	public static function save_user($first_name=NULL,$last_name=NULL,$id=NULL,$role=NULL,$email=NULL,$password=NULL,$username=NULL) {

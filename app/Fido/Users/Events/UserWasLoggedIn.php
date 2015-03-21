@@ -2,7 +2,7 @@
 
 namespace Fido\Users\Events;
 
-use Fido\Core\Eventing\Event as Event;
+use Fido\Core\Eventing\Event;
 
 class UserWasLoggedIn extends Event{
 
