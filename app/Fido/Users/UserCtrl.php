@@ -6,6 +6,8 @@ use Fido\Core\Api\LoggedInUserApiCtrl as LoggedInUserApiCtrl;
 
 class UserCtrl extends LoggedInUserApiCtrl {
 
+	protected $allowedRoles = [self::ADMIN_ROLE];
+
 	public function get($id = null) {
 
 	}

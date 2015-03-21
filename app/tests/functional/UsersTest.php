@@ -7,15 +7,33 @@ use Fido\Users\User as User;
 class UserTest extends ApiTestCase {
 
 	/** @test **/
+	public function only_logged_in_user_can_access () {
+		\Auth::logout();
+		$this->setExpectedException('Fido\Users\Exceptions\NotAllowedException');
+		$result = $this->getJson('admin/users','GET');
+	}
+
+	/** @test **/
+	public function check_that_correct_user_can_view_api () {
+		\Auth::logout();
+		$this->setExpectedException('Fido\Core\Exceptions\NotAllowedException');
+		$user = $this->createAndReturn(new UserCreator(['role'=>'user']));
+		
+		\Auth::loginUsingId($user->id);
+		$this->getJson('admin/users','GET');
+	}
+
+	/** @test **/
 	public function get_all_users_within_application (){
-		
+		\Auth::logout();
 
-		$this->times(4)->create(new UserCreator());
-		$user = $this->times(1)->create(new UserCreator(['role'=>'admin']), true);
-		
-		$this->be(User::find($user->id));
+		$this->times(4)->create(new UserCreator(['role'=>'user']));
 
-		$result = $this->getJson('/users','GET');
+		$user = $this->create(new UserCreator(['role'=>'admin']), true);
+		
+		\Auth::loginUsingId($user->id);
+
+		$result = $this->getJson('admin/users','GET');
 		
 		dd($result);
 	}

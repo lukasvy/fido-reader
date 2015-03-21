@@ -33,6 +33,7 @@ abstract class FakeCreator implements FakeCreatorInterface {
 	private function getModifiedParams () {
 		$model = $this->getParams($this->faker);
 		$model = $this->makeUnique($model);
+
 		if ($this->overwrite) {
 			$model = array_merge($model,$this->overwrite);
 		}
@@ -120,6 +121,7 @@ abstract class FakeCreator implements FakeCreatorInterface {
 	 * 	'last_name'  => $this->faker->lastName
 	 * ];
 	 * return $user;
+	 * 
 	 * @param [Faker] $faker faker instance will be passed to the function 
 	 * automatically
 	 * @return [array]

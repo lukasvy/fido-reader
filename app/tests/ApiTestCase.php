@@ -45,7 +45,7 @@ class ApiTestCase extends \TestCase {
      * @param $uri
      * @return mixed
      */
-    protected function getJson($uri, $method = 'GET', $params)
+    protected function getJson($uri, $method = 'GET', $params = [])
     {
         return json_decode($this->call($method, $uri,$params)->getContent());
     }
@@ -63,6 +63,10 @@ class ApiTestCase extends \TestCase {
         {
             $this->assertObjectHasAttribute($attribute, $object);
         }
+    }
+
+    public function createAndReturn(FakeCreatorInterface $creator) {
+    	return $this->create($creator,true);
     }
 
 	public function create (FakeCreatorInterface $creator, $getCreated = false) {;

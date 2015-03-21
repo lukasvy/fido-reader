@@ -9,7 +9,7 @@ class LoginTest extends ApiTestCase {
 	public function it_logs_in_user_with_correct_credentials (){
 		$credentials = ['password' => 'test', 'username' => 'user'];
 		
-		$this->times(1)->create(new UserCreator($credentials));
+		$this->create(new UserCreator($credentials));
 		
 		$result = $this->getJson('/login','POST',$credentials);
 		
@@ -23,7 +23,7 @@ class LoginTest extends ApiTestCase {
 
 		$credentials = ['password' => 'test', 'username' => 'user'];
 		
-		$this->times(1)->create(new UserCreator);
+		$this->create(new UserCreator);
 
 		$result = $this->getJson('/login','POST',$credentials);
 

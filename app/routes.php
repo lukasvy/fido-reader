@@ -105,7 +105,7 @@ Route::any('/test', function(){
 });
 
 // Refactoring views
-Route::get('admin/users/{id?}', ['uses' => 'Fido/Users/UsersCtrl@get', 'as' => 'getUsers']);
+Route::get('admin/users/{id?}', ['uses' => 'Fido\Users\UserCtrl@get', 'as' => 'getUsers']);
 Route::post('/login',['uses' => 'Fido\Users\UserCtrl@logIn','as' => 'login']);
 
 // Route::post('/login', function(){
